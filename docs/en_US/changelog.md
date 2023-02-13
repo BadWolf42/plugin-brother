@@ -4,7 +4,12 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
-# 04/03/2022
+# Beta - 14/02/2023
+- **Plugin taken over by BadWolf**
+- Added usage statistics
+- Code indentation/cleanup
+
+# Stable - 04/03/2022
 - Logs typo fix
 - Useless sudo rights removal
 - Manual refresh in cron to prevent UI lock
