@@ -4,27 +4,16 @@
     "description": "Ce plugin récupère les informations de votre imprimante Brother en utilisant SNMP, notamment les niveaux d'encre (jet d'encre ou laser).",
     "utilization": "Sur la page de l'équipement, renseignez l'adresse IP ou le hostname de votre imprimante, son type (jet d'ecnre ou laser), puis cliquez sur le bouton Sauvegarder.",
     "licence": "AGPL",
-    "author": "hugoKs3",
+    "author": "BadWolf",
     "require": "4.2.8",
     "category": "monitoring",
     "hasDependency": true,
     "hasOwnDeamon": false,
     "maxDependancyInstallTime": 0,
-    "changelog": "https://hugoks3.github.io/plugin-brother/#language#/changelog",
-    "documentation": "https://hugoks3.github.io/plugin-brother/#language#/",
-    "link" : {
-		"forum":"https://community.jeedom.com/t/plugin-brother-stable/80216"
-	},
-    "language": [
-        "fr_FR",
-        "en_US"
-    ],
-    "compatibility": [
-        "miniplus",
-        "smart",
-        "rpi",
-        "docker",
-        "diy",
-        "v4"
-    ]
+    "issue": "https://github.com/badwolf42/jMQTT/issues",
+    "changelog": "https://badwolf42.github.io/plugin-brother/#language#/changelog",
+    "documentation": "https://badwolf42.github.io/plugin-brother/#language#/",
+    "link": {"forum": "https://community.jeedom.com/tag/plugin-brother"},
+    "language": ["fr_FR", "en_US"],
+    "compatibility": ["atlas", "miniplus", "smart", "rpi", "docker", "diy", "v4"]
 }
