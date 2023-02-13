@@ -7,10 +7,11 @@ This implies to have:
 
 You like this plugin? You can, if you wish, encourage its developer:
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/hugoKs3)
+[//]: [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/hugoKs3)
 
 # Credits
 This plugin relies on the work done by:
+- [hugoKs3](https://github.com/hugoKs3) for creating this plugin in February 2022 and maintaining it since January 2023
 - [bieniu](https://github.com/bieniu) through his Python package to connect to Brother: [brother](https://github.com/bieniu/brother)
 
 # Disclaimer
