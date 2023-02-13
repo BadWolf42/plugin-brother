@@ -128,6 +128,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                     <input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherWidget"/>
                   </div>
                 </div>
+              </div>
             </fieldset>
           </form>
         </div>
