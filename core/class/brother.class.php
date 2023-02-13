@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -19,28 +18,84 @@
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
+
 class brother extends eqLogic {
 
-  
   public static $_widgetPossibility = array('custom' => true);
 
-	/* * *************************Attributs****************************** */
+  /* * *************************Attributs****************************** */
 
-	/* * ***********************Methode static*************************** */
+  /* * ***********************Methode static*************************** */
 
   public static function cronHourly() {
-    $eqLogics = self::byType(__CLASS__, true);
-
-    foreach ($eqLogics as $eqLogic)
-    {
+    foreach (self::byType(__CLASS__, true) as $eqLogic)
         $eqLogic->refreshInfo();
+    self::pluginStats();
+  }
+
+  public static function pluginStats($_reason = 'cron') {
+    // Check last reporting (or if forced)
+    $nextStats = @cache::byKey('brother::nextStats')->getValue(0);
+    if ($_reason === 'cron' && (time() < $nextStats)) { // No reason to force send stats
+      // log::add(__CLASS__, 'debug', sprintf(__("Aucune raison d'envoyer des données statistiques avant le %s", __FILE__), date('Y-m-d H:i:s', $nextStats)));
+      return;
+    }
+    // Ensure next attempt will be in at least 5 minutes
+    cache::set('brother::nextStats', time() + 300 + rand(0, 300)); ; // in 5-10 mins
+
+    $url = 'https://stats.bad.wf/brother.php';
+    $data = array();
+    $data['version'] = 1;
+    $data['hardwareKey'] = jeedom::getHardwareKey();
+    $data['hardwareName'] = jeedom::getHardwareName();
+    $data['distrib'] = system::getDistrib();
+    $data['phpVersion'] = phpversion();
+    $data['jeedom'] = jeedom::version();
+    $data['lang'] = translate::getLanguage();
+    $plugin = update::byLogicalId(__CLASS__);
+    $data['source'] = $plugin->getSource();
+    $data['branch'] = $plugin->getConfiguration('version', 'unknown');
+    $data['localVersion'] = $plugin->getLocalVersion();
+    $data['remoteVersion'] = $plugin->getRemoteVersion();
+    $data['reason'] = $_reason;
+    if ($_reason == 'uninstall' || $_reason == 'noStats')
+      $data['removeMe'] = true;
+    else
+      $data['next'] = time() + 432000 + rand(0, 172800); // Next stats in 5-7 days
+    $options = array('http' => array(
+      'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+      'method'  => 'POST',
+      'content' => http_build_query($data)
+    ));
+    log::add(__CLASS__, 'debug', sprintf(__('Transmission des données statistiques suivantes : %s', __FILE__), json_encode($data)));
+    $context = stream_context_create($options);
+    $result = @file_get_contents($url, false, $context);
+
+    if ($result === false) {
+      // Could not send or invalid data
+      log::add(__CLASS__, 'debug', __('Impossible de communiquer avec le serveur de statistiques (Réponse : false)', __FILE__));
+      return;
+    }
+    $response = @json_decode($result, true);
+    if (!isset($response['status']) || $response['status'] != 'success') {
+      // Could not send or invalid data
+      log::add(__CLASS__, 'debug', sprintf(__('Impossible de communiquer avec le serveur de statistiques (Réponse : %s)', __FILE__), $result));
+    } else {
+      if ($data['removeMe']) {
+        log::add(__CLASS__, 'info', __('Données statistiques supprimées', __FILE__));
+        cache::set('brother::nextStats', PHP_INT_MAX);
+      } else {
+        log::add(__CLASS__, 'debug', sprintf(__('Données statistiques envoyées (Réponse : %s)', __FILE__), $result));
+        // Set last sent datetime
+        cache::set('brother::nextStats', $data['next']);
+      }
     }
   }
 
   public static function executeManualRefresh() {
     self::cronHourly();
     log::add(__CLASS__, 'debug', 'Manual refresh executed');
-    $cron = cron::byClassAndFunction('brother', 'manualRefresh');
+    $cron = cron::byClassAndFunction(__CLASS__, 'manualRefresh');
     if (is_object($cron)) {
       $cron->stop();
       $cron->remove();
@@ -48,11 +103,11 @@ class brother extends eqLogic {
     }
   }
 
-	public function postSave() {
+  public function postSave() {
     $cmd = $this->getCmd(null, 'model');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Modèle');
+      $cmd->setName(__('Modèle', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('model');
       $cmd->setType('info');
@@ -62,9 +117,9 @@ class brother extends eqLogic {
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'serial');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Numéro de série');
+      $cmd->setName(__('Numéro de série', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('serial');
       $cmd->setType('info');
@@ -74,9 +129,9 @@ class brother extends eqLogic {
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'firmware');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Firmware');
+      $cmd->setName(__('Firmware', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('firmware');
       $cmd->setType('info');
@@ -86,9 +141,9 @@ class brother extends eqLogic {
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'status');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Status');
+      $cmd->setName(__('Statut', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('status');
       $cmd->setType('info');
@@ -98,9 +153,9 @@ class brother extends eqLogic {
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'counter');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Nombre de pages');
+      $cmd->setName(__('Nombre de pages', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('counter');
       $cmd->setType('info');
@@ -113,9 +168,9 @@ class brother extends eqLogic {
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'black');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Noir');
+      $cmd->setName(__('Noir', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('black');
       $cmd->setType('info');
@@ -124,14 +179,14 @@ class brother extends eqLogic {
       $cmd->setIsVisible(1);
       $cmd->setUnite('%');
       $cmd->setGeneric_type('CONSUMPTION');
-      $cmd->setConfiguration('minValue', 0); 
+      $cmd->setConfiguration('minValue', 0);
       $cmd->setConfiguration('maxValue', 100);
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'cyan');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Cyan');
+      $cmd->setName(__('Cyan', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('cyan');
       $cmd->setType('info');
@@ -140,14 +195,14 @@ class brother extends eqLogic {
       $cmd->setIsVisible(1);
       $cmd->setUnite('%');
       $cmd->setGeneric_type('CONSUMPTION');
-      $cmd->setConfiguration('minValue', 0); 
+      $cmd->setConfiguration('minValue', 0);
       $cmd->setConfiguration('maxValue', 100);
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'magenta');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Magenta');
+      $cmd->setName(__('Magenta', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('magenta');
       $cmd->setType('info');
@@ -156,14 +211,14 @@ class brother extends eqLogic {
       $cmd->setIsVisible(1);
       $cmd->setUnite('%');
       $cmd->setGeneric_type('CONSUMPTION');
-      $cmd->setConfiguration('minValue', 0); 
+      $cmd->setConfiguration('minValue', 0);
       $cmd->setConfiguration('maxValue', 100);
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'yellow');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Jaune');
+      $cmd->setName(__('Jaune', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('yellow');
       $cmd->setType('info');
@@ -172,14 +227,14 @@ class brother extends eqLogic {
       $cmd->setIsVisible(1);
       $cmd->setUnite('%');
       $cmd->setGeneric_type('CONSUMPTION');
-      $cmd->setConfiguration('minValue', 0); 
+      $cmd->setConfiguration('minValue', 0);
       $cmd->setConfiguration('maxValue', 100);
       $cmd->save();
     }
     $cmd = $this->getCmd(null, 'lastprints');
-    if ( ! is_object($cmd)) {
+    if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setName('Dernières impressions');
+      $cmd->setName(__('Dernières impressions', __FILE__));
       $cmd->setEqLogic_id($this->getId());
       $cmd->setLogicalId('lastprints');
       $cmd->setType('info');
@@ -194,18 +249,17 @@ class brother extends eqLogic {
     $cmd = $this->getCmd(null, 'refresh');
     if (!is_object($cmd)) {
       $cmd = new brotherCmd();
-      $cmd->setLogicalId('refresh');
+      $cmd->setName(__('Rafraichir', __FILE__));
       $cmd->setEqLogic_id($this->getId());
-      $cmd->setName('Rafraichir');
+      $cmd->setLogicalId('refresh');
       $cmd->setType('action');
       $cmd->setSubType('other');
       $cmd->save();
     }
-    if ($this->getIsEnable() == 1) {
+    if ($this->getIsEnable() == 1)
       $this->setManualRrefresh();
-    }
-	}
-    
+  }
+
   public function preInsert() {
     $this->setIsVisible(1);
     $this->setConfiguration('brotherWidget', 1);
@@ -213,15 +267,15 @@ class brother extends eqLogic {
     $this->setDisplay('width', '312px');
     $this->setIsEnable(1);
   }
-  
+
   public function setManualRrefresh() {
-    $cron = cron::byClassAndFunction('brother', 'manualRefresh');
+    $cron = cron::byClassAndFunction(__CLASS__, 'manualRefresh');
     $now = new DateTime('NOW');
     $now->modify('+1 minute');
     $cronExpr = $now->format('i H j n') . ' *';
     if (!is_object($cron)) {
       $cron = new cron();
-      $cron->setClass('brother');
+      $cron->setClass(__CLASS__);
       $cron->setFunction('executeManualRefresh');
       $cron->setEnable(1);
       $cron->setDeamon(0);
@@ -234,41 +288,40 @@ class brother extends eqLogic {
     }
     log::add(__CLASS__, 'debug', 'Manual refresh cron scheduled : ' . $cronExpr);
   }
-    
+
   public function pullBrother() {
     $brother_path = dirname(__FILE__) . '/../..';
     $host = $this->getConfiguration('brotherAddress');
     $type = $this->getConfiguration('brotherType');
 
-    $cmd = 'python3 ' . $brother_path . '/resources/jeeBrother.py ' . $host . ' ' . $type . ' ' . $brother_path . ' ' . log::convertLogLevel(log::getLogLevel('brother'));
+    $cmd = 'python3 ' . $brother_path . '/resources/jeeBrother.py ' . $host . ' ' . $type . ' ' . $brother_path . ' ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
     log::add(__CLASS__, 'info', 'Lancement script Brother : ' . $cmd);
 
-    exec($cmd . ' >> ' . log::getPathToLog('brother') . ' 2>&1'); 
+    exec($cmd . ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1');
     $string = file_get_contents($brother_path . '/data/output.json');
     log::add(__CLASS__, 'debug', $this->getHumanName() . ' file content: ' . $string);
     if ($string === false) {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' file content empty');
-        return null;
+      log::add(__CLASS__, 'error', $this->getHumanName() . ' file content empty');
+      return null;
     }
     $json_a = json_decode($string);
     if ($json_a === null) {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' JSON decode impossible');
-        return null;
+      log::add(__CLASS__, 'error', $this->getHumanName() . ' JSON decode impossible');
+      return null;
     }
     if (isset($json_a->msg)) {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $obj->message);
-        return null;
-    } 
+      log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $obj->message);
+      return null;
+    }
     return $json_a;
   }
 
-	public function refreshInfo() {
-		$obj = $this->pullBrother();
-    if (!is_null($obj)) {
-        $this->recordData($obj);
-    }
-	}
-    
+  public function refreshInfo() {
+    $obj = $this->pullBrother();
+    if (!is_null($obj))
+      $this->recordData($obj);
+  }
+
   public function recordData($obj) {
     if ($this->getIsEnable()) {
       if (!is_null($obj->model)) {
@@ -298,14 +351,12 @@ class brother extends eqLogic {
 
       $type = $this->getConfiguration('brotherType');
       $printertype = "ink";
-      if ($type == "laser") {
+      if ($type == "laser")
         $printertype = "toner";
-      }
       $colors = ["black", "cyan", "magenta", "yellow"];
       $colorType = $this->getConfiguration('brotherColorType');
-      if ($colorType == 0) {
+      if ($colorType == 0)
         $colors = ["black"];
-      }
       foreach ($colors as $color) {
         $index = $color . '_' . $printertype . '_remaining';
         if (!is_null($obj->$index)) {
@@ -320,11 +371,10 @@ class brother extends eqLogic {
       $curCounterValue = $cmdCounter->execCmd();
       if (!is_null($obj->page_counter) && !is_null($curCounterValue)) {
         $cmdLasPrints = $this->getCmd(null, 'lastprints');
-        if (!is_null($cmdLasPrints) && is_null($cmdLasPrints->execCmd())) {
+        if (!is_null($cmdLasPrints) && is_null($cmdLasPrints->execCmd()))
           $lastprintsValue = 0;
-        } else {
+        else
           $lastprintsValue = $obj->page_counter - $curCounterValue;
-        }
         $this->checkAndUpdateCmd('lastprints', $lastprintsValue);
         log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for last prints: ' . $lastprintsValue);
       } else {
@@ -339,70 +389,64 @@ class brother extends eqLogic {
       }
     }
   }
-    
+
   public function toHtml($_version = 'dashboard') {
-    if ($this->getConfiguration('brotherWidget') != 1) {
-    	return parent::toHtml($_version);
-    }
+    if ($this->getConfiguration('brotherWidget') != 1)
+      return parent::toHtml($_version);
     $replace = $this->preToHtml($_version);
-    if (!is_array($replace)) {
-        return $replace;
-    }
+    if (!is_array($replace))
+      return $replace;
     $version = jeedom::versionAlias($_version);
-   
+
     $refreshCmd = $this->getCmd(null, 'refresh');
-    if ($refreshCmd->getIsVisible() == 1) {
-        $replace['#refresh_id#'] = $refreshCmd->getId();
-    } else {
-        $replace['#refresh_id#'] = '';
-    }
-    
+    $replace['#refresh_id#'] = ($refreshCmd->getIsVisible() != 1) ? '' : $refreshCmd->getId();
+
     $blackCmd = $this->getCmd(null, 'black');
     if (!is_null($blackCmd) && $blackCmd->getIsVisible() == 1) {
-        $replace['#black_level#'] = $blackCmd->execCmd();
-        $replace['#black_id#'] = $blackCmd->getId();
-        $replace['#black_visible#'] = 1;
-        $replace['#black_bkg#'] = 0.1;
+      $replace['#black_level#'] = $blackCmd->execCmd();
+      $replace['#black_id#'] = $blackCmd->getId();
+      $replace['#black_visible#'] = 1;
+      $replace['#black_bkg#'] = 0.1;
     } else {
-        $replace['#black_level#'] = 0;
-        $replace['#black_visible#'] = 0;
-        $replace['#black_bkg#'] = 0;
+      $replace['#black_level#'] = 0;
+      $replace['#black_visible#'] = 0;
+      $replace['#black_bkg#'] = 0;
     }
 
     $cyanCmd = $this->getCmd(null, 'cyan');
     if (!is_null($cyanCmd) && $cyanCmd->getIsVisible() == 1) {
-        $replace['#cyan_level#'] = $cyanCmd->execCmd();
-        $replace['#cyan_id#'] = $cyanCmd->getId();
-        $replace['#cyan_visible#'] = 1;
-        $replace['#cyan_bkg#'] = 0.1;
+      $replace['#cyan_level#'] = $cyanCmd->execCmd();
+      $replace['#cyan_id#'] = $cyanCmd->getId();
+      $replace['#cyan_visible#'] = 1;
+      $replace['#cyan_bkg#'] = 0.1;
     } else {
-        $replace['#cyan_level#'] = 0;
-        $replace['#cyan_visible#'] = 0;
-        $replace['#cyan_bkg#'] = 0;
+      $replace['#cyan_level#'] = 0;
+      $replace['#cyan_visible#'] = 0;
+      $replace['#cyan_bkg#'] = 0;
     }
 
     $magentaCmd = $this->getCmd(null, 'magenta');
     if (!is_null($magentaCmd) && $magentaCmd->getIsVisible() == 1) {
-        $replace['#magenta_level#'] = $magentaCmd->execCmd();
-        $replace['#magenta_id#'] = $magentaCmd->getId();
-        $replace['#magenta_visible#'] = 1;
-        $replace['#magenta_bkg#'] = 0.1;
+      $replace['#magenta_level#'] = $magentaCmd->execCmd();
+      $replace['#magenta_id#'] = $magentaCmd->getId();
+      $replace['#magenta_visible#'] = 1;
+      $replace['#magenta_bkg#'] = 0.1;
     } else {
-        $replace['#magenta_level#'] = 0;
-        $replace['#magenta_visible#'] = 0;
-        $replace['#magenta_bkg#'] = 0;
+      $replace['#magenta_level#'] = 0;
+      $replace['#magenta_visible#'] = 0;
+      $replace['#magenta_bkg#'] = 0;
     }
 
     $yellowCmd = $this->getCmd(null, 'yellow');
     if (!is_null($yellowCmd) && $yellowCmd->getIsVisible() == 1) {
-        $replace['#yellow_level#'] = $yellowCmd->execCmd();
-        $replace['#yellow_id#'] = $yellowCmd->getId();
-        $replace['#yellow_visible#'] = 1;
-        $replace['#yellow_bkg#'] = 0.1;
+      $replace['#yellow_level#'] = $yellowCmd->execCmd();
+      $replace['#yellow_id#'] = $yellowCmd->getId();
+      $replace['#yellow_visible#'] = 1;
+      $replace['#yellow_bkg#'] = 0.1;
     } else {
-        $replace['#yellow_level#'] = 0;
-        $replace['#yellow_visible#'] = 0;
-        $replace['#yellow_bkg#'] = 0;
+      $replace['#yellow_level#'] = 0;
+      $replace['#yellow_visible#'] = 0;
+      $replace['#yellow_bkg#'] = 0;
     }
 
     $statusCmd = $this->getCmd(null, 'status');
@@ -418,23 +462,23 @@ class brother extends eqLogic {
     }
     $pagesCmd = $this->getCmd(null, 'counter');
     if ($pagesCmd->getIsVisible() == 1) {
-        $replace['#brother_counter#'] = $pagesCmd->execCmd();
-        $replace['#brother_counter_id#'] = $pagesCmd->getId();
-        $replace['#brother_counter_uid#'] = $pagesCmd->getId();
-        $replace['#brother_counter_eqid#'] = $replace['#uid#'];
-        $replace['#brother_counter_valueDate#'] = $pagesCmd->getValueDate();
-        $replace['#brother_counter_collectDate#'] = $pagesCmd->getCollectDate();
+      $replace['#brother_counter#'] = $pagesCmd->execCmd();
+      $replace['#brother_counter_id#'] = $pagesCmd->getId();
+      $replace['#brother_counter_uid#'] = $pagesCmd->getId();
+      $replace['#brother_counter_eqid#'] = $replace['#uid#'];
+      $replace['#brother_counter_valueDate#'] = $pagesCmd->getValueDate();
+      $replace['#brother_counter_collectDate#'] = $pagesCmd->getCollectDate();
     } else {
       $replace['#brother_counter_id#'] = '';
     }
     $lastprintsCmd = $this->getCmd(null, 'lastprints');
     if ($lastprintsCmd->getIsVisible() == 1) {
-        $replace['#brother_lastprints#'] = $lastprintsCmd->execCmd();
-        $replace['#brother_lastprints_id#'] = $lastprintsCmd->getId();
-        $replace['#brother_lastprints_uid#'] = $lastprintsCmd->getId();
-        $replace['#brother_lastprints_eqid#'] = $replace['#uid#'];
-        $replace['#brother_lastprints_valueDate#'] = $lastprintsCmd->getValueDate();
-        $replace['#brother_lastprints_collectDate#'] = $lastprintsCmd->getCollectDate();
+      $replace['#brother_lastprints#'] = $lastprintsCmd->execCmd();
+      $replace['#brother_lastprints_id#'] = $lastprintsCmd->getId();
+      $replace['#brother_lastprints_uid#'] = $lastprintsCmd->getId();
+      $replace['#brother_lastprints_eqid#'] = $replace['#uid#'];
+      $replace['#brother_lastprints_valueDate#'] = $lastprintsCmd->getValueDate();
+      $replace['#brother_lastprints_collectDate#'] = $lastprintsCmd->getCollectDate();
     } else {
       $replace['#brother_lastprints_id#'] = '';
     }
@@ -445,32 +489,31 @@ class brother extends eqLogic {
 
 }
 
-class brotherCmd extends cmd
-{
-  
-  public function preSave(){
+class brotherCmd extends cmd {
+
+  public function preSave() {
     if ($this->getLogicalId() == 'cyan' || $this->getLogicalId() == 'yellow' || $this->getLogicalId() == 'magenta') {
-        $eqLogic = $this->getEqLogic();
-        $visible = $eqLogic->getConfiguration('brotherColorType',1);
-        $this->setIsVisible($visible); 
+      $eqLogic = $this->getEqLogic();
+      $visible = $eqLogic->getConfiguration('brotherColorType',1);
+      $this->setIsVisible($visible);
     }
 }
 
   public function dontRemoveCmd() {
-		return true;
-	}
-    
-	public function execute($_options = null) {
+    return true;
+  }
+
+  public function execute($_options = null) {
     $eqLogic = $this->getEqLogic();
-    if (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1) {
-        throw new Exception(__('Equipement desactivé impossible d\éxecuter la commande : ' . $this->getHumanName(), __FILE__));
-    }
-    log::add('brother', 'debug', 'Execution de la commande ' . $this->getLogicalId());
+    if (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)
+      throw new Exception(sprintf(__("Equipement desactivé impossible d'éxecuter la commande : %s", __FILE__), $this->getHumanName()));
+    log::add(__CLASS__, 'debug', 'Execution de la commande ' . $this->getLogicalId());
     switch ($this->getLogicalId()) {
-        case "refresh":
-            $eqLogic->setManualRrefresh();
-            break;
+      case "refresh":
+        $eqLogic->setManualRrefresh();
+        break;
     }
   }
+
 }
 ?>
