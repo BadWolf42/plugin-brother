@@ -10,7 +10,7 @@
     "hasDependency": true,
     "hasOwnDeamon": false,
     "maxDependancyInstallTime": 0,
-    "issue": "https://github.com/badwolf42/jMQTT/issues",
+    "issue": "https://github.com/badwolf42/plugin-brother/issues",
     "changelog": "https://badwolf42.github.io/plugin-brother/#language#/changelog",
     "documentation": "https://badwolf42.github.io/plugin-brother/#language#/",
     "link": {"forum": "https://community.jeedom.com/tag/plugin-brother"},

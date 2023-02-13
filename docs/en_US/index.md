@@ -33,11 +33,12 @@ Most probably, some Brother printers might not be compatible. Just try and see!
 
 # Contributions
 
-This plugin is opened for contributions and even encouraged! Please submit your pull requests for improvements/fixes on <a href="https://github.com/hugoKs3/plugin-brother" target="_blank">Github</a>
+This plugin is opened for contributions and even encouraged! Please submit your pull requests for improvements/fixes on <a href="https://github.com/badwolf42/plugin-brother" target="_blank">Github</a>
 
 # Credits
 
 This plugin relies on the work done by:
+- [hugoKs3](https://github.com/hugoKs3) for creating this plugin in February 2022 and maintaining it since January 2023
 - [bieniu](https://github.com/bieniu) through his Python package to connect to Brother: [brother](https://github.com/bieniu/brother)
 
 # Disclaimer

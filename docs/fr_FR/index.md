@@ -33,11 +33,12 @@ Très probablement, certaines imprimantes Brother ne seront pas compatibles. Ess
 
 # Contributions
 
-Ce plugin gratuit est ouvert à contributions (améliorations et/ou corrections). N'hésitez pas à soumettre vos pull-requests sur <a href="https://github.com/hugoKs3/plugin-brother" target="_blank">Github</a>.
+Ce plugin gratuit est ouvert à contributions (améliorations et/ou corrections). N'hésitez pas à soumettre vos pull-requests sur <a href="https://github.com/badwolf42/plugin-brother" target="_blank">Github</a>.
 
 # Credits
 
 Ce plugin se repose sur le travail de :
+- [hugoKs3](https://github.com/hugoKs3) qui a créé ce plugin en février 2022 et l'a maintenu jusqu'en janvier 2023
 - [bieniu](https://github.com/bieniu) via son package Python: [brother](https://github.com/bieniu/brother)
 
 # Disclaimer
