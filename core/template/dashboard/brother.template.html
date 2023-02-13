@@ -1,176 +1,167 @@
 <div class="eqLogic eqLogic-widget #eqType# allowResize" style="width:#width#;height:#height#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-eqType="#eqType#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" >
-    <center class="widget-name">
-		<span class="warning" title="#alert_name#">
-			<i class='#alert_icon#'></i>
-		</span>
-        <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
-			<i class="fas fa-sync"></i>
-		</span>
-		<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
-		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
-	</center>
-    <div>
-        <div style="width: 50%; display:inline-block;">
-            <center>
-                <figure style="width: 150px;margin-left: 5px;margin-top: 5px;margin-bottom: 5px;margin-right: 5px;">
-                    <div id="ink-gauge-container"></div>                
-                </figure>
-            </center>
-        </div>
-        <div style="width: 50%; float: right;">
-            <center>
-            <div class="cmd cmd-widget brotherStatus" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#brother_status_id#" data-cmd_uid="#brother_status_uid#" data-version="#version#" data-eqlogic_id="#brother_status_eqid#" data-alertlevel="none" title="Date de valeur : #brother_status_valueDate#<br/>Date de collecte : #brother_status_collectDate#">
-                <div class="content-xs">
-                    <span class="cmdName ">Status </span> <strong class="state">#brother_status#</strong>
-                </div>
-
-            </div>    
-            <br/>
-            <div class="cmd cmd-widget history cursor pageCounter" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_counter_id#" data-cmd_uid="#brother_counter_uid#" data-version="#version#" data-eqlogic_id="#brother_counter_eqid#" title="Date de valeur : #brother_counter_valueDate#<br/>Date de collecte : #brother_counter_collectDate#">
-                <div class="title ">
-                  <div class="cmdName">Pages</div>
-                </div>
-                <div class="content-sm">
-                  <span class="pull-right"></span>
-                  <span class="pull-right state">#brother_counter#</span>
-                </div>
-            </div>
-            <br/>
-            <div class="cmd cmd-widget history cursor lastprints" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_lastprints_id#" data-cmd_uid="#brother_lastprints_uid#" data-version="#version#" data-eqlogic_id="#brother_lastprints_eqid#" title="Date de valeur : #brother_lastprints_valueDate#<br/>Date de collecte : #brother_lastprints_collectDate#">
-                <div class="title ">
-                  <div class="cmdName">Dernières impressions</div>
-                </div>
-                <div class="content-sm">
-                  <span class="pull-right"></span>
-                  <span class="pull-right state">#brother_lastprints#</span>
-                </div>
-            </div>
-            </center>
-        </div>
+  <center class="widget-name">
+    <span class="warning" title="#alert_name#"><i class='#alert_icon#'></i></span>
+    <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#"><i class="fas fa-sync"></i></span>
+    <span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+    <a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+  </center>
+  <div>
+    <div style="width: 50%; display:inline-block;">
+      <center>
+        <figure style="width: 150px;margin-left: 5px;margin-top: 5px;margin-bottom: 5px;margin-right: 5px;">
+          <div id="ink-gauge-container"></div>
+        </figure>
+      </center>
     </div>
-    #divGraphInfo#
-    <script>
-        if ('#refresh_id#' != ''){
-			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-				jeedom.cmd.execute({id: '#refresh_id#'});
-			});
-		}else{
-			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
-		}
+    <div style="width: 50%; float: right;">
+      <center>
+        <div class="cmd cmd-widget brotherStatus" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#brother_status_id#" data-cmd_uid="#brother_status_uid#" data-version="#version#" data-eqlogic_id="#brother_status_eqid#" data-alertlevel="none" title="Date de valeur : #brother_status_valueDate#<br/>Date de collecte : #brother_status_collectDate#">
+          <div class="content-xs">
+            <span class="cmdName ">Status </span> <strong class="state">#brother_status#</strong>
+          </div>
+        </div>
+        <br/>
+        <div class="cmd cmd-widget history cursor pageCounter" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_counter_id#" data-cmd_uid="#brother_counter_uid#" data-version="#version#" data-eqlogic_id="#brother_counter_eqid#" title="Date de valeur : #brother_counter_valueDate#<br/>Date de collecte : #brother_counter_collectDate#">
+          <div class="title ">
+            <div class="cmdName">Pages</div>
+          </div>
+          <div class="content-sm">
+            <span class="pull-right"></span>
+            <span class="pull-right state">#brother_counter#</span>
+          </div>
+        </div>
+        <br/>
+        <div class="cmd cmd-widget history cursor lastprints" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_lastprints_id#" data-cmd_uid="#brother_lastprints_uid#" data-version="#version#" data-eqlogic_id="#brother_lastprints_eqid#" title="Date de valeur : #brother_lastprints_valueDate#<br/>Date de collecte : #brother_lastprints_collectDate#">
+          <div class="title ">
+            <div class="cmdName">Dernières impressions</div>
+          </div>
+          <div class="content-sm">
+            <span class="pull-right"></span>
+            <span class="pull-right state">#brother_lastprints#</span>
+          </div>
+        </div>
+      </center>
+    </div>
+  </div>
+  #divGraphInfo#
+  <script>
+    if ('#refresh_id#' != '')
+      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+        jeedom.cmd.execute({id: '#refresh_id#'});
+      });
+    else
+      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
 
-        if ('#brother_counter_id#' == '') {
-            $('.eqLogic[data-eqLogic_uid=#uid#] .pageCounter').remove();
+    if ('#brother_counter_id#' == '')
+      $('.eqLogic[data-eqLogic_uid=#uid#] .pageCounter').remove();
+    if ('#brother_lastprints_id#' == '')
+      $('.eqLogic[data-eqLogic_uid=#uid#] .lastprints').remove();
+    if ('#brother_status_id#' == '')
+      $('.eqLogic[data-eqLogic_uid=#uid#] .brotherStatus').remove();
+
+    Highcharts.chart('ink-gauge-container', {
+      credits: {enabled: false},
+      exporting : {enabled: false},
+      title: {text: null},
+      tooltip: {enabled: false},
+
+      chart: {
+        type: 'solidgauge',
+        backgroundColor: 'transaprent',
+        height: '100%'
+      },
+
+      pane: {
+        startAngle: 0,
+        endAngle: 360,
+        background: [
+        { // Track for Black
+          outerRadius: '99%',
+          innerRadius: '84%',
+          backgroundColor: 'rgba(204,204,204,#black_bkg#)',
+          borderWidth: 0
+        }, { // Track for Cyan
+          outerRadius: '83%',
+          innerRadius: '68%',
+          backgroundColor: 'rgba(204,204,204,#cyan_bkg#)',
+          borderWidth: 0
+        }, { // Track for Magenta
+          outerRadius: '67%',
+          innerRadius: '52%',
+          backgroundColor: 'rgba(204,204,204,#magenta_bkg#)',
+          borderWidth: 0
+        }, { // Track for Yellow
+          outerRadius: '51%',
+          innerRadius: '36%',
+          backgroundColor: 'rgba(204,204,204,#yellow_bkg#)',
+          borderWidth: 0
+        }]
+      },
+
+      yAxis: {
+        min: 0,
+        max: 100,
+        lineWidth: 0,
+        tickPositions: []
+      },
+
+      plotOptions: {
+        solidgauge: {
+          dataLabels: {
+            enabled: false
+          },
+          linecap: 'round',
+          stickyTracking: false,
+          rounded: true,
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function () {
+                $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=' + this.options.key).dialog('open')
+              }
+            }
+          }
         }
-        if ('#brother_lastprints_id#' == '') {
-            $('.eqLogic[data-eqLogic_uid=#uid#] .lastprints').remove();
-        }
-        if ('#brother_status_id#' == '') {
-            $('.eqLogic[data-eqLogic_uid=#uid#] .brotherStatus').remove();
-        }
+      },
 
-        Highcharts.chart('ink-gauge-container', {
-            credits: {enabled: false},
-            exporting : {enabled: false},
-            title: {text: null},
-            tooltip: {enabled: false},
+      series: [{
+        name: 'Black',
+        data: [{
+          color: 'rgba(0,0,0,#black_visible#)',
+          radius: '99%',
+          innerRadius: '84%',
+          y: #black_level#,
+          key: '#black_id#'
+        }]
+      }, {
+        name: 'Cyan',
+        data: [{
+          color: 'rgba(0,255,255,#cyan_visible#)',
+          radius: '83%',
+          innerRadius: '68%',
+          y: #cyan_level#,
+          key: '#cyan_id#'
+        }]
+      }, {
+        name: 'Magenta',
+        data: [{
+          color: 'rgba(255,0,255,#magenta_visible#)',
+          radius: '67%',
+          innerRadius: '52%',
+          y: #magenta_level#,
+          key: '#magenta_id#'
+        }]
+      }, {
+        name: 'Yellow',
+        data: [{
+          color: 'rgba(255,255,0,#yellow_visible#)',
+          radius: '51%',
+          innerRadius: '36%',
+          y: #yellow_level#,
+          key: '#yellow_id#'
+        }]
+      }]
+    });
 
-            chart: {
-                type: 'solidgauge',
-                backgroundColor: 'transaprent',
-                height: '100%'
-            },
-
-            pane: {
-                startAngle: 0,
-                endAngle: 360,
-                background: [
-                { // Track for Black
-                    outerRadius: '99%',
-                    innerRadius: '84%',
-                    backgroundColor: 'rgba(204,204,204,#black_bkg#)',
-                    borderWidth: 0
-                }, { // Track for Cyan
-                    outerRadius: '83%',
-                    innerRadius: '68%',
-                    backgroundColor: 'rgba(204,204,204,#cyan_bkg#)',
-                    borderWidth: 0
-                }, { // Track for Magenta
-                    outerRadius: '67%',
-                    innerRadius: '52%',
-                    backgroundColor: 'rgba(204,204,204,#magenta_bkg#)',
-                    borderWidth: 0
-                }, { // Track for Yellow
-                    outerRadius: '51%',
-                    innerRadius: '36%',
-                    backgroundColor: 'rgba(204,204,204,#yellow_bkg#)',
-                    borderWidth: 0
-                }]
-            },
-
-            yAxis: {
-                min: 0,
-                max: 100,
-                lineWidth: 0,
-                tickPositions: []
-            },
-
-            plotOptions: {
-                solidgauge: {
-                    dataLabels: {
-                        enabled: false
-                    },
-                    linecap: 'round',
-                    stickyTracking: false,
-                    rounded: true,
-                    cursor: 'pointer',
-                    point: {
-                        events: {
-                            click: function () {
-                                $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=' + this.options.key).dialog('open')
-                            }
-                        }
-                    }
-                }
-            },
-
-            series: [{
-                name: 'Black',
-                data: [{
-                    color: 'rgba(0,0,0,#black_visible#)',
-                    radius: '99%',
-                    innerRadius: '84%',
-                    y: #black_level#,
-                    key: '#black_id#'
-                }]
-            }, {
-                name: 'Cyan',
-                data: [{
-                    color: 'rgba(0,255,255,#cyan_visible#)',
-                    radius: '83%',
-                    innerRadius: '68%',
-                    y: #cyan_level#,
-                    key: '#cyan_id#'
-                }]
-            }, {
-                name: 'Magenta',
-                data: [{
-                    color: 'rgba(255,0,255,#magenta_visible#)',
-                    radius: '67%',
-                    innerRadius: '52%',
-                    y: #magenta_level#,
-                    key: '#magenta_id#'
-                }]
-            }, {
-                name: 'Yellow',
-                data: [{
-                    color: 'rgba(255,255,0,#yellow_visible#)',
-                    radius: '51%',
-                    innerRadius: '36%',
-                    y: #yellow_level#,
-                    key: '#yellow_id#'
-                }]
-            }]
-        });
-
-    </script> 
+  </script>
 </div>
