@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -19,45 +18,44 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
-  function brother_install() {
-
-  }
+function brother_install() {
+  brother::pluginStats('install');
+}
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
-  function brother_update() {
-    foreach (eqLogic::byType('brother') as $eqLogic) {
-      $cmd = $eqLogic->getCmd(null, 'lastprints');
-      if ( ! is_object($cmd)) {
-        $cmd = new brotherCmd();
-        $cmd->setName('Dernières impressions');
-        $cmd->setEqLogic_id($eqLogic->getId());
-        $cmd->setLogicalId('lastprints');
-        $cmd->setType('info');
-        $cmd->setSubType('numeric');
-        $cmd->setIsHistorized(1);
-        $cmd->setIsVisible(1);
-        $cmd->setGeneric_type('CONSUMPTION');
-        $cmd->setTemplate('dashboard','tile');
-        $cmd->setTemplate('mobile','tile');
-        $cmd->save();
-      }
-      $eqLogic->save();
+function brother_update() {
+  foreach (eqLogic::byType('brother') as $eqLogic) {
+    $cmd = $eqLogic->getCmd(null, 'lastprints');
+    if (!is_object($cmd)) {
+      $cmd = new brotherCmd();
+      $cmd->setName('Dernières impressions');
+      $cmd->setEqLogic_id($eqLogic->getId());
+      $cmd->setLogicalId('lastprints');
+      $cmd->setType('info');
+      $cmd->setSubType('numeric');
+      $cmd->setIsHistorized(1);
+      $cmd->setIsVisible(1);
+      $cmd->setGeneric_type('CONSUMPTION');
+      $cmd->setTemplate('dashboard','tile');
+      $cmd->setTemplate('mobile','tile');
+      $cmd->save();
     }
-    foreach (eqLogic::byType('mybin') as $eqLogic) {
-      if ($eqLogic->getConfiguration('brotherColorType', 'unset') === 'unset') {
-          $eqLogic->setConfiguration('brotherColorType', 1);
-      }
-    }
-
-    $brother_path = dirname(__FILE__) . '/..';
-    $cmd = 'sudo rm -f ' . $brother_path . '/data/output.json';
-    exec($cmd); 
-
+    $eqLogic->save();
   }
+  foreach (eqLogic::byType('brother') as $eqLogic) {
+    if ($eqLogic->getConfiguration('brotherColorType', 'unset') === 'unset')
+      $eqLogic->setConfiguration('brotherColorType', 1);
+  }
+
+  $cmd = 'sudo rm -f ' . realpath(__FILE__ . '/../data/output.json');
+  exec($cmd);
+
+  brother::pluginStats('update');
+}
 
 // Fonction exécutée automatiquement après la suppression du plugin
-  function brother_remove() {
-
-  }
+function brother_remove() {
+  brother::pluginStats('uninstall');
+}
 
 ?>
