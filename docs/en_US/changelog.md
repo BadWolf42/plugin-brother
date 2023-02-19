@@ -4,8 +4,12 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
-# Beta - 20/02/2023
+# Stable - 20/02/2023
+- **Plugin taken over by BadWolf**
 - Change in the way refresh works: a callback is used to avoid creating a cron
+- Renamed the "master" branch to "stable", to those who use Github and not the Market, please update your branch
+- Added usage statistics
+- Code indentation/cleanup
 
 # Beta - 14/02/2023
 - **Plugin taken over by BadWolf**

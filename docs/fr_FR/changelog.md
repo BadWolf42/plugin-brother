@@ -4,8 +4,12 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
-# Beta - 20/02/2023
+# Stable - 20/02/2023
+- **Reprise du plugin par BadWolf**
 - Modification du fonctionnement du rafraichissement : un callback est utilisé pour éviter de créer un cron
+- Renommage de la branche "master" en "stable", merci à ceux qui utilisent Github au lieu du Market de changer de branche
+- Ajout de statistiques d'utilisation
+- Indentation/nettoyage du code
 
 # Beta - 14/02/2023
 - **Reprise du plugin par BadWolf**
