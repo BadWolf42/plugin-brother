@@ -301,71 +301,67 @@ class brother extends eqLogic {
       $this->recordData($obj);
   }
 
-  public function recordData($obj) {
-    if ($this->getIsEnable()) {
-      if (!is_null($obj->model)) {
-        $this->checkAndUpdateCmd('model', $obj->model);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for model: ' . $obj->model);
-      } else {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for model');
-      }
-      if (!is_null($obj->serial)) {
-        $this->checkAndUpdateCmd('serial', $obj->serial);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for serial: ' . $obj->serial);
-      } else {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for serial');
-      }
-      if (!is_null($obj->firmware)) {
-        $this->checkAndUpdateCmd('firmware', $obj->firmware);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for firmware: ' . $obj->firmware);
-      } else {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for firmware');
-      }
-      if (!is_null($obj->status)) {
-        $this->checkAndUpdateCmd('status', $obj->status);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for status: ' . $obj->status);
-      } else {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for status');
-      }
+  public function recordData($output) {
+    if (!$this->getIsEnable()) {
+      log::add(__CLASS__, 'debug', $this->getHumanName() . ' is disabled trashing received data... ');
+      return;
+    }
 
-      $type = $this->getConfiguration('brotherType');
-      $printertype = "ink";
-      if ($type == "laser")
-        $printertype = "toner";
-      $colors = ["black", "cyan", "magenta", "yellow"];
-      $colorType = $this->getConfiguration('brotherColorType');
-      if ($colorType == 0)
-        $colors = ["black"];
-      foreach ($colors as $color) {
-        $index = $color . '_' . $printertype . '_remaining';
-        if (!is_null($obj->$index)) {
-          $this->checkAndUpdateCmd($color, $obj->$index);
-          log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for ' . $color . ': ' . $obj->$index);
-        } else {
-          log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for ' . $index);
-        }
-      }
+    if ($output === false || strlen($output) == 0) {
+      log::add(__CLASS__, 'info', $this->getHumanName() . ' no data received');
+      $output = '{"unreachable": true}';
+    } else {
+      log::add(__CLASS__, 'debug', $this->getHumanName() . ' data content: ' . $output);
+    }
 
-      $cmdCounter = $this->getCmd(null, 'counter');
-      $curCounterValue = $cmdCounter->execCmd();
-      if (!is_null($obj->page_counter) && !is_null($curCounterValue)) {
-        $cmdLasPrints = $this->getCmd(null, 'lastprints');
-        if (!is_null($cmdLasPrints) && is_null($cmdLasPrints->execCmd()))
-          $lastprintsValue = 0;
-        else
-          $lastprintsValue = $obj->page_counter - $curCounterValue;
-        $this->checkAndUpdateCmd('lastprints', $lastprintsValue);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for last prints: ' . $lastprintsValue);
-      } else {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for page_counter and/or last counter');
-      }
+    $data = json_decode($output/* , true */);
+    if ($data === null) {
+      log::add(__CLASS__, 'error', $this->getHumanName() . ' JSON decode impossible');
+      return;
+    }
+    if (isset($data->msg)) {
+      log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $data->message);
+      return;
+    }
 
-      if (!is_null($obj->page_counter)) {
-        $this->checkAndUpdateCmd('counter', $obj->page_counter);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for counter: ' . $obj->page_counter);
+    // Check if device is unreachable
+    if (!is_null($data->unreachable)) {
+      $this->checkAndUpdateCmd('status', __('Injoignable', __FILE__));
+      log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for status: ' . __('hors-ligne', __FILE__));
+      return;
+    }
+    // List keys to fetch in $data
+    $pType = ($this->getConfiguration('brotherType') == 'laser') ? 'toner' : 'ink';
+    $infos = ['model' => 'model', 'serial' => 'serial', 'firmware' => 'firmware', 'status' => 'status'];
+    $infos += ['counter' => 'page_counter', 'black' => 'black_'.$pType.'_remaining'];
+    if ($this->getConfiguration('brotherColorType') != 0) {
+      $infos += ['cyan' => 'cyan_'.$pType.'_remaining'];
+      $infos += ['magenta' => 'magenta_'.$pType.'_remaining'];
+      $infos += ['yellow' => 'yellow_'.$pType.'_remaining'];
+    }
+    // Backup last counter value
+    $lastCounterVal = $this->getCmd(null, 'counter')->execCmd();
+
+    // Fetch keys and set cmds
+    foreach ($infos as $logicalId => $key) {
+      if (!is_null($data->$key)) {
+        $this->checkAndUpdateCmd($logicalId, $data->$key);
+        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for ' . $logicalId . ': ' . $data->$key);
       } else {
-        log::add(__CLASS__, 'error', $this->getHumanName() . ' null value for page_counter');
+        log::add(__CLASS__, 'debug', $this->getHumanName() . ' null value for ' . $key);
       }
+    }
+
+    // Calculate 'lastprints', if possible
+    if (!is_null($data->page_counter) && !is_null($lastCounterVal)) {
+      $lastPrintsValue = 0;
+      $cmdLastPrints = $this->getCmd(null, 'lastprints');
+      if (is_null($cmdLastPrints) || !is_null($cmdLastPrints->execCmd()))
+        $lastPrintsValue = $data->page_counter - $lastCounterVal;
+      $this->checkAndUpdateCmd('lastprints', $lastPrintsValue);
+      log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for last prints: ' . $lastPrintsValue);
+    } else {
+      log::add(__CLASS__, 'debug', $this->getHumanName() . ' null value for page_counter and/or last counter');
     }
   }
 
