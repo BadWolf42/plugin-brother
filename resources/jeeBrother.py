@@ -1,59 +1,44 @@
 import asyncio
-from sys import argv
-
+from datetime import datetime
 from brother import Brother, SnmpError, UnsupportedModel
-
-import asyncio
-import logging
-from sys import argv
-
-import pysnmp.hlapi.asyncio as hlapi
-
-from brother import Brother, SnmpError, UnsupportedModel
-from datetime import date, datetime
-
 import json
+import logging
+from os import getenv
+import requests
+from sys import argv
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime):
             return o.isoformat()
-
         return json.JSONEncoder.default(self, o)
 
-
 async def main():
-    host = argv[1]
-    kind = argv[2]
-    mypath = argv[3]
-    mylog = argv[4]
+    if len(argv) <= 2:
+        logging.error('usage: %s <host> <ink/laser>', argv[0])
+        exit(1)
 
-    if mylog == "debug":
-        logging.basicConfig(level=logging.DEBUG)
-    elif mylog == "info":
-        logging.basicConfig(level=logging.INFO)
-    elif mylog == "error":
-        logging.basicConfig(level=logging.ERROR)
-    elif mylog == "warning":
-        logging.basicConfig(level=logging.WARNING)
-    else:
-        logging.basicConfig(level=logging.INFO)
+    newlevel = {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'error': logging.ERROR
+    }.get(getenv("LOGLEVEL", "error"), logging.ERROR)
+    logging.basicConfig(level = newlevel)
 
-    brother = Brother(host, kind=kind)
+    callback = getenv("CALLBACK", None) # with APIKEY included
+    if callback is None:
+        logging.error('Missing callback url (use ENV var CALLBACK="<url>")')
+        exit(2)
 
     try:
+        brother = Brother(argv[1], kind = argv[2])
         data = await brother.async_update()
-    except (ConnectionError, SnmpError, UnsupportedModel) as error:
-        logging.error(f"{error}")
-        return
+    except (ConnectionError, SnmpError, UnsupportedModel) as e:
+        logging.error(f'{e}')
+        data = {'unreachable': True}
 
-    brother.shutdown()
+    r = requests.post(callback, json.dumps(data, cls=DateTimeEncoder))
 
-    if data:
-        myfile = open(mypath + "/data/output.json", "w")
-        json.dump(data, myfile, cls=DateTimeEncoder)
-        myfile.close()
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
-
+if __name__ == '__main__':
+    asyncio.get_event_loop().run_until_complete(main())

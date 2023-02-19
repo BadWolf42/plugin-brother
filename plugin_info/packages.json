@@ -4,6 +4,7 @@
       "python3-pip" : {}
     },
     "pip3" : {
+      "requests" : {},
       "brother" : {}
     }
   }
