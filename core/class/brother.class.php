@@ -268,37 +268,22 @@ class brother extends eqLogic {
     $this->setIsEnable(1);
   }
 
-  public function pullBrother() {
-    $brother_path = dirname(__FILE__) . '/../..';
-    $host = $this->getConfiguration('brotherAddress');
-    $type = $this->getConfiguration('brotherType');
-
-    $cmd = 'python3 ' . $brother_path . '/resources/jeeBrother.py ' . $host . ' ' . $type . ' ' . $brother_path . ' ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
-    log::add(__CLASS__, 'info', 'Lancement script Brother : ' . $cmd);
-
-    exec($cmd . ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1');
-    $string = file_get_contents($brother_path . '/data/output.json');
-    log::add(__CLASS__, 'debug', $this->getHumanName() . ' file content: ' . $string);
-    if ($string === false) {
-      log::add(__CLASS__, 'error', $this->getHumanName() . ' file content empty');
-      return null;
-    }
-    $json_a = json_decode($string);
-    if ($json_a === null) {
-      log::add(__CLASS__, 'error', $this->getHumanName() . ' JSON decode impossible');
-      return null;
-    }
-    if (isset($json_a->msg)) {
-      log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $obj->message);
-      return null;
-    }
-    return $json_a;
-  }
-
   public function refreshInfo() {
-    $obj = $this->pullBrother();
-    if (!is_null($obj))
-      $this->recordData($obj);
+    if (!$this->getIsEnable())
+      return;
+
+    $cmd  = 'LOGLEVEL=' . log::convertLogLevel(log::getLogLevel(__CLASS__)) . ' ';
+    $port = config::byKey('internalPort', 'core', 80);
+    $comp = trim(config::byKey('internalComplement', 'core', ''), '/');
+    if ($comp !== '') $comp .= '/';
+    $cmd .= "CALLBACK='http://localhost:".$port."/".$comp."plugins/brother/core/php/callback.php";
+    $cmd .= "?apikey=".jeedom::getApiKey(__CLASS__)."&eqId=".$this->getId()."' ";
+    $cmd .= 'python3 ' . realpath(__DIR__ . '/../../resources/jeeBrother.py') . ' ';
+    $cmd .= $this->getConfiguration('brotherAddress') . ' ';
+    $cmd .= $this->getConfiguration('brotherType') . ' ';
+    $cmd .= ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1 &';
+    log::add(__CLASS__, 'info', 'Lancement script Brother : ' . $cmd);
+    exec($cmd);
   }
 
   public function recordData($output) {
