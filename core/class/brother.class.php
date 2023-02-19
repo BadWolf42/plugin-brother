@@ -29,7 +29,7 @@ class brother extends eqLogic {
 
   public static function cronHourly() {
     foreach (self::byType(__CLASS__, true) as $eqLogic)
-        $eqLogic->refreshInfo();
+      $eqLogic->refreshInfo();
     self::pluginStats();
   }
 
@@ -257,7 +257,7 @@ class brother extends eqLogic {
       $cmd->save();
     }
     if ($this->getIsEnable() == 1)
-      $this->setManualRrefresh();
+      $this->refreshInfo();
   }
 
   public function preInsert() {
@@ -266,27 +266,6 @@ class brother extends eqLogic {
     $this->setDisplay('height','192px');
     $this->setDisplay('width', '312px');
     $this->setIsEnable(1);
-  }
-
-  public function setManualRrefresh() {
-    $cron = cron::byClassAndFunction(__CLASS__, 'manualRefresh');
-    $now = new DateTime('NOW');
-    $now->modify('+1 minute');
-    $cronExpr = $now->format('i H j n') . ' *';
-    if (!is_object($cron)) {
-      $cron = new cron();
-      $cron->setClass(__CLASS__);
-      $cron->setFunction('executeManualRefresh');
-      $cron->setEnable(1);
-      $cron->setDeamon(0);
-      $cron->setOnce(1);
-      $cron->setSchedule($cronExpr);
-      $cron->save();
-    } else {
-      $cron->setSchedule($cronExpr);
-      $cron->save();
-    }
-    log::add(__CLASS__, 'debug', 'Manual refresh cron scheduled : ' . $cronExpr);
   }
 
   public function pullBrother() {
@@ -510,7 +489,7 @@ class brotherCmd extends cmd {
     log::add(__CLASS__, 'debug', 'Execution de la commande ' . $this->getLogicalId());
     switch ($this->getLogicalId()) {
       case "refresh":
-        $eqLogic->setManualRrefresh();
+        $eqLogic->refreshInfo();
         break;
     }
   }
