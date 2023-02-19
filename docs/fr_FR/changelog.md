@@ -4,6 +4,9 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# Beta - 20/02/2023
+- Modification du fonctionnement du rafraichissement : un callback est utilisé pour éviter de créer un cron
+
 # Beta - 14/02/2023
 - **Reprise du plugin par BadWolf**
 - Ajout de statistiques d'utilisation

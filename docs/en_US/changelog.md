@@ -4,6 +4,9 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
+# Beta - 20/02/2023
+- Change in the way refresh works: a callback is used to avoid creating a cron
+
 # Beta - 14/02/2023
 - **Plugin taken over by BadWolf**
 - Added usage statistics
