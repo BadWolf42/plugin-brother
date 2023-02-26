@@ -51,7 +51,7 @@ class brother extends eqLogic {
     $data['distrib'] = system::getDistrib();
     $data['phpVersion'] = phpversion();
     $data['jeedom'] = jeedom::version();
-    $data['lang'] = translate::getLanguage();
+    $data['lang'] = config::byKey('language', 'core', 'fr_FR');
     $plugin = update::byLogicalId(__CLASS__);
     $data['source'] = $plugin->getSource();
     $data['branch'] = $plugin->getConfiguration('version', 'unknown');
