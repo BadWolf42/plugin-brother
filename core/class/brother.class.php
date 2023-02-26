@@ -284,6 +284,7 @@ class brother extends eqLogic {
     $cmd .= ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1 &';
     log::add(__CLASS__, 'info', 'Lancement script Brother : ' . $cmd);
     exec($cmd);
+    $this->checkAndUpdateCmd('status', __('Actualisation', __FILE__));
   }
 
   public function recordData($output) {
@@ -299,20 +300,20 @@ class brother extends eqLogic {
       log::add(__CLASS__, 'debug', $this->getHumanName() . ' data content: ' . $output);
     }
 
-    $data = json_decode($output/* , true */);
+    $data = json_decode($output, true);
     if ($data === null) {
       log::add(__CLASS__, 'error', $this->getHumanName() . ' JSON decode impossible');
       return;
     }
-    if (isset($data->msg)) {
-      log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $data->message);
+    if (isset($data['msg'])) {
+      log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $data['message']);
       return;
     }
 
     // Check if device is unreachable
-    if (!is_null($data->unreachable)) {
+    if (isset($data['unreachable'])) {
       $this->checkAndUpdateCmd('status', __('Injoignable', __FILE__));
-      log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for status: ' . __('hors-ligne', __FILE__));
+      log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for status: ' . __('Injoignable', __FILE__));
       return;
     }
     // List keys to fetch in $data
@@ -329,20 +330,20 @@ class brother extends eqLogic {
 
     // Fetch keys and set cmds
     foreach ($infos as $logicalId => $key) {
-      if (!is_null($data->$key)) {
-        $this->checkAndUpdateCmd($logicalId, $data->$key);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for ' . $logicalId . ': ' . $data->$key);
+      if (isset($data[$key]) && !is_null($data[$key])) {
+        $this->checkAndUpdateCmd($logicalId, $data[$key]);
+        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for ' . $logicalId . ': ' . $data[$key]);
       } else {
         log::add(__CLASS__, 'debug', $this->getHumanName() . ' null value for ' . $key);
       }
     }
 
     // Calculate 'lastprints', if possible
-    if (!is_null($data->page_counter) && !is_null($lastCounterVal)) {
+    if (isset($data['page_counter']) && !is_null($data['page_counter']) && !is_null($lastCounterVal)) {
       $lastPrintsValue = 0;
       $cmdLastPrints = $this->getCmd(null, 'lastprints');
       if (is_null($cmdLastPrints) || !is_null($cmdLastPrints->execCmd()))
-        $lastPrintsValue = $data->page_counter - $lastCounterVal;
+        $lastPrintsValue = $data['page_counter'] - $lastCounterVal;
       $this->checkAndUpdateCmd('lastprints', $lastPrintsValue);
       log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for last prints: ' . $lastPrintsValue);
     } else {
