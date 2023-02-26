@@ -4,6 +4,12 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
+# Beta - 27/02/2023
+- Update equipments Commands tab in Jeedom 4.3 new style
+- Fix None object missing on equipments Equipment tab
+- Fix PHP Notice when printer is turned on
+- Fix some typos
+
 # Stable - 20/02/2023
 - **Plugin taken over by BadWolf**
 - Change in the way refresh works: a callback is used to avoid creating a cron

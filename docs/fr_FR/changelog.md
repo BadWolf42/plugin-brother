@@ -4,6 +4,12 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# Beta - 27/02/2023
+- Mise à jour de l'onglet Commandes des équipements dans le style de Jeedom 4.3
+- Correction l'objet "Aucun" manquait sur l'onglet Équipement des équipements
+- Correction de la PHP Notice lorsque l'imprimante était allumée
+- Correction typographique
+
 # Stable - 20/02/2023
 - **Reprise du plugin par BadWolf**
 - Modification du fonctionnement du rafraichissement : un callback est utilisé pour éviter de créer un cron
