@@ -66,7 +66,7 @@ foreach (eqLogic::byType($plugin->getId()) as $eqLogic) {
                 <label class="col-sm-6 control-label" >{{Objet parent}}</label>
                 <div class="col-sm-6">
                   <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
-                    <option value=""></option>
+                    <option value="">{{Aucun}}</option>
 <?php
 foreach ((jeeObject::buildTree (null, false)) as $object) {
   echo '<option value="' . $object->getId() . '">';
@@ -83,9 +83,9 @@ foreach ((jeeObject::buildTree (null, false)) as $object) {
                 <div class="col-sm-6">
 <?php
 foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
-	echo '<label class="checkbox-inline">';
-	echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
-	echo '</label>';
+  echo '<label class="checkbox-inline">';
+  echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+  echo '</label>';
 }
 ?>
                 </div>
@@ -135,19 +135,25 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
       </div>
 
       <div role="tabpanel" class="tab-pane" id="commandtab"><br/>
-        <table id="table_cmd" class="table table-bordered table-condensed">
-          <thead>
-            <tr>
-              <th style="width:50px;">{{Id}}</th>
-              <th style="width:300px;">{{Nom}}</th>
-              <th>{{Type}}</th>
-              <th class="col-xs-3">{{Options}}</th>
-              <th class="col-xs-2">{{Action}}</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-responsive">
+          <table id="table_cmd" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th class="hidden-xs" style="min-width:50px;width:70px">ID</th>
+                <th style="min-width:200px;width:350px">{{Nom}}</th>
+                <th style="min-width:70px;width:100px">{{Type}}</th>
+                <th style="min-width:260px;width:300px">{{Options}}</th>
+                <th style="min-width:135px;text-align:right">{{Etat}}</th>
+                <th style="min-width:125px;width:125px;text-align:center">{{Logical ID}}</th>
+                <th style="min-width:80px;width:200px">{{Actions}}</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
