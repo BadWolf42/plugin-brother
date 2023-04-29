@@ -17,43 +17,51 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-// Fonction exécutée automatiquement après l'installation du plugin
+
 function brother_install() {
-  brother::pluginStats('install');
+  log::add('brother', 'debug', 'install.php: brother_install()');
+  brother_update(false);
 }
 
-// Fonction exécutée automatiquement après la mise à jour du plugin
-function brother_update() {
-  foreach (eqLogic::byType('brother') as $eqLogic) {
-    $cmd = $eqLogic->getCmd(null, 'lastprints');
-    if (!is_object($cmd)) {
-      $cmd = new brotherCmd();
-      $cmd->setName('Dernières impressions');
-      $cmd->setEqLogic_id($eqLogic->getId());
-      $cmd->setLogicalId('lastprints');
-      $cmd->setType('info');
-      $cmd->setSubType('numeric');
-      $cmd->setIsHistorized(1);
-      $cmd->setIsVisible(1);
-      $cmd->setGeneric_type('CONSUMPTION');
-      $cmd->setTemplate('dashboard','tile');
-      $cmd->setTemplate('mobile','tile');
-      $cmd->save();
+function brother_update($_direct=true) {
+  if ($_direct)
+    log::add('brother', 'debug', 'install.php: brother_update()');
+
+  // if version info is not in DB, it means it is a fresh install of brother
+  // and so we don't need to run these functions to adapt eqLogic structure/config
+  // (even if plugin is disabled the config key stays)
+  try {
+    $content = file_get_contents(__DIR__ . '/info.json');
+    $data = json_decode($content, true);
+    $pluginVersion = $data['pluginVersion'];
+  } catch (Throwable $e) {
+    log::add('brother', 'warning', __("Impossible de récupérer le numéro de version dans le fichier info.json, ceci ce devrait pas arriver !", __FILE__));
+    $pluginVersion = 0;
+  }
+
+  $version = @intval(config::byKey('version', 'brother', $pluginVersion));
+
+  while (++$version <= $pluginVersion) {
+    try {
+      $file = __DIR__ . '/../resources/update/' . $version . '.php';
+      if (file_exists($file)) {
+        log::add('brother', 'debug', sprintf(__("Version %d : Application des modifications", __FILE__), $version));
+        include $file;
+        log::add('brother', 'debug', sprintf(__("Version %d : Modifications appliquées", __FILE__), $version));
+      }
+    } catch (Throwable $e) {
+      log::add('brother', 'error', str_replace("\n",'<br />',
+        sprintf(__("Version %1\$d : Exception lors de l'application des modifications : %2\$s", __FILE__)."<br />@Stack: %3\$s.",
+                $version, $e->getMessage(), $e->getTraceAsString())
+        ));
     }
-    $eqLogic->save();
-  }
-  foreach (eqLogic::byType('brother') as $eqLogic) {
-    if ($eqLogic->getConfiguration('brotherColorType', 'unset') === 'unset')
-      $eqLogic->setConfiguration('brotherColorType', 1);
   }
 
-  $cmd = 'sudo rm -f ' . realpath(__FILE__ . '/../data/output.json');
-  exec($cmd);
+  config::save('version', $pluginVersion, 'brother');
 
-  brother::pluginStats('update');
+  brother::pluginStats($_direct ? 'update' : 'install');
 }
 
-// Fonction exécutée automatiquement après la suppression du plugin
 function brother_remove() {
   brother::pluginStats('uninstall');
 }
