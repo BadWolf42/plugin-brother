@@ -12,8 +12,11 @@
     "maxDependancyInstallTime": 0,
     "issue": "https://github.com/badwolf42/plugin-brother/issues",
     "changelog": "https://badwolf42.github.io/plugin-brother/#language#/changelog",
+    "changelog_beta": "https://badwolf42.github.io/plugin-brother/#language#/changelog",
     "documentation": "https://badwolf42.github.io/plugin-brother/#language#/",
+    "documentation_beta": "https://badwolf42.github.io/plugin-brother/#language#/",
     "link": {"forum": "https://community.jeedom.com/tag/plugin-brother"},
     "language": ["fr_FR", "en_US"],
-    "compatibility": ["atlas", "miniplus", "smart", "rpi", "docker", "diy", "v4"]
+    "compatibility": ["atlas", "diy", "docker", "luna", "miniplus", "rpi", "smart", "v4"],
+    "pluginVersion": 3
 }
