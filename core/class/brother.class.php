@@ -41,7 +41,7 @@ class brother extends eqLogic {
       return;
     }
     // Ensure next attempt will be in at least 5 minutes
-    cache::set('brother::nextStats', time() + 300 + rand(0, 300)); ; // in 5-10 mins
+    cache::set('brother::nextStats', time() + 300 + rand(0, 300)); // in 5-10 mins
 
     $url = 'https://stats.bad.wf/brother.php';
     $data = array();
@@ -51,16 +51,14 @@ class brother extends eqLogic {
     $data['lastUUID'] = config::byKey('installUUID', __CLASS__, $data['hardwareKey']);
     $data['UUID'] = base64_encode(hash('sha384', microtime() . random_bytes('107'), true));
     $data['hardwareName'] = jeedom::getHardwareName();
-    $data['distrib'] = trim(shell_exec('. /etc/*-release && echo -en $ID $VERSION_ID'));
+    $data['distrib'] = trim(shell_exec('. /etc/*-release && echo $ID $VERSION_ID'));
     $data['phpVersion'] = phpversion();
     $data['jeedom'] = jeedom::version();
     $data['lang'] = config::byKey('language', 'core', 'fr_FR');
     $plugin = update::byLogicalId(__CLASS__);
     $data['source'] = $plugin->getSource();
     $data['branch'] = $plugin->getConfiguration('version', 'unknown');
-    $data['localVersion'] = $plugin->getLocalVersion();
-    $data['remoteVersion'] = $plugin->getRemoteVersion();
-    // $data['configVersion'] = config::byKey('version', __CLASS__, -1);
+    $data['configVersion'] = config::byKey('version', __CLASS__, -1);
     $data['reason'] = $_reason;
     if ($_reason == 'uninstall' || $_reason == 'noStats')
       $data['removeMe'] = true;
