@@ -43,8 +43,8 @@ Ce plugin se repose sur le travail de :
 
 # Disclaimer
 
--   Ce plugin ne prétend pas être exempt de bugs.
--   Ce plugin vous est fourni sans aucune garantie. Bien que peu probable, si il venait à corrompre votre installation Jeedom, l'auteur ne pourrait en être tenu pour responsable.
+- Ce plugin ne prétend pas être exempt de bugs.
+- Ce plugin vous est fourni sans aucune garantie. Bien que peu probable, si il venait à corrompre votre installation Jeedom, l'auteur ne pourrait en être tenu pour responsable.
 
 # ChangeLog
 Disponible [ici](./changelog.html).

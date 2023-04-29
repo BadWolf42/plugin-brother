@@ -4,11 +4,24 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
+# Stable - 30/04/2023 (v4)
+- **The widget on the Dashboard is now updated when changing a value**
+- **Logo update, using yellow instead of dark blue**
+- **Minimum version support is now Jeedom 4.3**
+- Add Luna as supported hardware
+- Add version number in info.json
+- Cleanup of installation, update and migration scripts
+- Include changelod and beta documentation in info.json
+- Updated Equipment Commands tab in Jeedom 4.3 style
+- Fixed "None" item was missing on Equipment tab of equipments
+- Fixed PHP Notice when printer was turned on
+- Fixed some typos
+
 # Beta - 27/02/2023
-- Update equipments Commands tab in Jeedom 4.3 new style
-- Fix None object missing on equipments Equipment tab
-- Fix PHP Notice when printer is turned on
-- Fix some typos
+- Updated Equipment Commands tab in Jeedom 4.3 style
+- Fixed "None" item was missing on Equipment tab of equipments
+- Fixed PHP Notice when printer was turned on
+- Fixed some typos
 
 # Stable - 20/02/2023
 - **Plugin taken over by BadWolf**

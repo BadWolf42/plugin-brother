@@ -43,8 +43,8 @@ This plugin relies on the work done by:
 
 # Disclaimer
 
--   This code does not pretend to be bug-free
--   Although it should not harm your Jeedom system, it is provided without any warranty or liability
+- This code does not pretend to be bug-free
+- Although it should not harm your Jeedom system, it is provided without any warranty or liability
 
 # ChangeLog
 Available [here](./changelog.html).

@@ -18,5 +18,5 @@
     "link": {"forum": "https://community.jeedom.com/tag/plugin-brother"},
     "language": ["fr_FR", "en_US"],
     "compatibility": ["atlas", "diy", "docker", "luna", "miniplus", "rpi", "smart", "v4"],
-    "pluginVersion": 3
+    "pluginVersion": 4
 }
