@@ -47,8 +47,11 @@ class brother extends eqLogic {
     $data = array();
     $data['version'] = 1;
     $data['hardwareKey'] = jeedom::getHardwareKey();
+    // Ensure system unicity using a rotating UUID
+    $data['lastUUID'] = config::byKey('installUUID', __CLASS__, $data['hardwareKey']);
+    $data['UUID'] = base64_encode(hash('sha384', microtime() . random_bytes('107'), true));
     $data['hardwareName'] = jeedom::getHardwareName();
-    $data['distrib'] = system::getDistrib();
+    $data['distrib'] = trim(shell_exec('. /etc/*-release && echo -en $ID $VERSION_ID'));
     $data['phpVersion'] = phpversion();
     $data['jeedom'] = jeedom::version();
     $data['lang'] = config::byKey('language', 'core', 'fr_FR');
@@ -57,6 +60,7 @@ class brother extends eqLogic {
     $data['branch'] = $plugin->getConfiguration('version', 'unknown');
     $data['localVersion'] = $plugin->getLocalVersion();
     $data['remoteVersion'] = $plugin->getRemoteVersion();
+    // $data['configVersion'] = config::byKey('version', __CLASS__, -1);
     $data['reason'] = $_reason;
     if ($_reason == 'uninstall' || $_reason == 'noStats')
       $data['removeMe'] = true;
@@ -64,8 +68,7 @@ class brother extends eqLogic {
       $data['next'] = time() + 432000 + rand(0, 172800); // Next stats in 5-7 days
     $options = array('http' => array(
       'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-      'method'  => 'POST',
-      'content' => http_build_query($data)
+      'method'  => 'POST', 'content' => http_build_query($data)
     ));
     log::add(__CLASS__, 'debug', sprintf(__('Transmission des données statistiques suivantes : %s', __FILE__), json_encode($data)));
     $context = stream_context_create($options);
@@ -81,6 +84,7 @@ class brother extends eqLogic {
       // Could not send or invalid data
       log::add(__CLASS__, 'debug', sprintf(__('Impossible de communiquer avec le serveur de statistiques (Réponse : %s)', __FILE__), $result));
     } else {
+      config::save('installUUID', $data['UUID'], __CLASS__);
       if ($data['removeMe']) {
         log::add(__CLASS__, 'info', __('Données statistiques supprimées', __FILE__));
         cache::set('brother::nextStats', PHP_INT_MAX);
