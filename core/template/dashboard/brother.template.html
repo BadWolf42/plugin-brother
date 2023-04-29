@@ -9,19 +9,19 @@
     <div style="width: 50%; display:inline-block;">
       <center>
         <figure style="width: 150px;margin-left: 5px;margin-top: 5px;margin-bottom: 5px;margin-right: 5px;">
-          <div id="ink-gauge-container"></div>
+          <div id="gauge-container-#id#"></div>
         </figure>
       </center>
     </div>
     <div style="width: 50%; float: right;">
       <center>
-        <div class="cmd cmd-widget brotherStatus" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#brother_status_id#" data-cmd_uid="#brother_status_uid#" data-version="#version#" data-eqlogic_id="#brother_status_eqid#" data-alertlevel="none" title="Date de valeur : #brother_status_valueDate#<br/>Date de collecte : #brother_status_collectDate#">
+        <div class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#brother_status_id#" title="Date de valeur : #brother_status_valueDate#<br/>Date de collecte : #brother_status_collectDate#">
           <div class="content-xs">
             <span class="cmdName ">Status </span> <strong class="state">#brother_status#</strong>
           </div>
         </div>
         <br/>
-        <div class="cmd cmd-widget history cursor pageCounter" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_counter_id#" data-cmd_uid="#brother_counter_uid#" data-version="#version#" data-eqlogic_id="#brother_counter_eqid#" title="Date de valeur : #brother_counter_valueDate#<br/>Date de collecte : #brother_counter_collectDate#">
+        <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_counter_id#" title="Date de valeur : #brother_counter_valueDate#<br/>Date de collecte : #brother_counter_collectDate#">
           <div class="title ">
             <div class="cmdName">Pages</div>
           </div>
@@ -31,7 +31,7 @@
           </div>
         </div>
         <br/>
-        <div class="cmd cmd-widget history cursor lastprints" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_lastprints_id#" data-cmd_uid="#brother_lastprints_uid#" data-version="#version#" data-eqlogic_id="#brother_lastprints_eqid#" title="Date de valeur : #brother_lastprints_valueDate#<br/>Date de collecte : #brother_lastprints_collectDate#">
+        <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_lastprints_id#" title="Date de valeur : #brother_lastprints_valueDate#<br/>Date de collecte : #brother_lastprints_collectDate#">
           <div class="title ">
             <div class="cmdName">Dernières impressions</div>
           </div>
@@ -45,21 +45,18 @@
   </div>
   #divGraphInfo#
   <script>
-    if ('#refresh_id#' != '')
-      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+    // Remove all unused cmd (empty id)
+    $('.eqLogic[data-eqLogic_uid=#uid#] [data-cmd_id=""]').remove();
+
+    // Enable manual refresh
+    if ('#refresh_id#' != '') {
+      $('.cmd[data-cmd_id=#refresh_id#]').off('click').on('click', function () {
         jeedom.cmd.execute({id: '#refresh_id#'});
       });
-    else
-      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
+    }
 
-    if ('#brother_counter_id#' == '')
-      $('.eqLogic[data-eqLogic_uid=#uid#] .pageCounter').remove();
-    if ('#brother_lastprints_id#' == '')
-      $('.eqLogic[data-eqLogic_uid=#uid#] .lastprints').remove();
-    if ('#brother_status_id#' == '')
-      $('.eqLogic[data-eqLogic_uid=#uid#] .brotherStatus').remove();
-
-    Highcharts.chart('ink-gauge-container', {
+    // Draw graph
+    Highcharts.chart('gauge-container-#id#', {
       credits: {enabled: false},
       exporting : {enabled: false},
       title: {text: null},
@@ -161,6 +158,44 @@
           key: '#yellow_id#'
         }]
       }]
+    });
+
+    // Update Status on value change
+    jeedom.cmd.addUpdateFunction('#brother_status_id#',function(_options) {
+      $('.cmd[data-cmd_id=#brother_status_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
+      $('.cmd[data-cmd_id=#brother_status_id#] .state').empty().append(_options.display_value)
+    });
+
+    // Update Counter on value change
+    jeedom.cmd.addUpdateFunction('#brother_counter_id#',function(_options) {
+      $('.cmd[data-cmd_id=#brother_counter_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
+      $('.cmd[data-cmd_id=#brother_counter_id#] .state').empty().append(_options.display_value)
+    });
+
+    // Update Lastprints on value change
+    jeedom.cmd.addUpdateFunction('#brother_lastprints_id#',function(_options) {
+      $('.cmd[data-cmd_id=#brother_lastprints_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
+      $('.cmd[data-cmd_id=#brother_lastprints_id#] .state').empty().append(_options.display_value)
+    });
+
+    // Update Black on graph on value change
+    jeedom.cmd.addUpdateFunction('#black_id#',function(_options) {
+      $('#gauge-container-#id#').highcharts().series[0].update({data: [{y: _options.value}]});
+    });
+
+    // Update Cyan on graph on value change
+    jeedom.cmd.addUpdateFunction('#cyan_id#',function(_options) {
+      $('#gauge-container-#id#').highcharts().series[1].update({data: [{y: _options.value}]});
+    });
+
+    // Update Magenta on graph on value change
+    jeedom.cmd.addUpdateFunction('#magenta_id#',function(_options) {
+      $('#gauge-container-#id#').highcharts().series[2].update({data: [{y: _options.value}]});
+    });
+
+    // Update Yellow on graph on value change
+    jeedom.cmd.addUpdateFunction('#yellow_id#',function(_options) {
+      $('#gauge-container-#id#').highcharts().series[3].update({data: [{y: _options.value}]});
     });
 
   </script>
