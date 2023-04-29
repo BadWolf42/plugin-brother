@@ -6,12 +6,12 @@
 
 # Stable - 30/04/2023 (v4)
 - **Le widget sur le Dashboard est maintenant mis à jour lors du changement d'une valeur**
-- **Actualisation du logo, en utilisant du jaune au lieu du bleu foncé**
+- **Changement du logo, en utilisant du jaune au lieu du bleu foncé**
 - **Le support de la version minimale est désormais Jeedom 4.3**
 - Ajouter Luna comme matériel pris en charge
 - Ajouter le numéro de version dans info.json
 - Nettoyage des scripts d'installation, de mise à jour et de migration
-- Inclusion du changelod et de la documentation bêta dans info.json
+- Inclusion du changelog et de la documentation bêta dans info.json
 - Mise à jour de l'onglet Commandes des équipements dans le style de Jeedom 4.3
 - Correction l'objet "Aucun" manquait sur l'onglet Équipement des équipements
 - Correction de la PHP Notice lorsque l'imprimante est allumée
