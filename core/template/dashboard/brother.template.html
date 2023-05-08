@@ -9,7 +9,20 @@
     <div style="width: 50%; display:inline-block;">
       <center>
         <figure style="width: 150px;margin-left: 5px;margin-top: 5px;margin-bottom: 5px;margin-right: 5px;">
-          <div id="gauge-container-#id#"></div>
+          <div id="gauge-container-#id#">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
+              <defs></defs>
+              <circle cx="75" cy="72" r="53" fill="transparent" stroke="grey"></circle>
+              <circle cx="75" cy="72" r="47" fill="transparent" stroke="rgba(204,204,204,#black_bkg#)" stroke-width="8" />
+              <circle cx="75" cy="72" r="38" fill="transparent" stroke="rgba(204,204,204,#cyan_bkg#)" stroke-width="8" />
+              <circle cx="75" cy="72" r="29" fill="transparent" stroke="rgba(204,204,204,#magenta_bkg#)" stroke-width="8" />
+              <circle cx="75" cy="72" r="20" fill="transparent" stroke="rgba(204,204,204,#yellow_bkg#)" stroke-width="8" />
+              <path class="blackQte" d="M 75 25 A 47 47 270 0 1 107.66 105.79" stroke="rgba(0,0,0,#black_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <path class="cyanQte" d="M 75 34 A 38 38 270 0 1 101.41 99.32" stroke="rgba(0,255,255,#cyan_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <path class="magentaQte" d="M 75 43 A 29 29 270 0 1 95.15 92.85" stroke="rgba(255,0,255,#magenta_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <path class="yellowQte" d="M 75 52 A 20 20 270 0 1 88.90 86.38" stroke="rgba(255,255,0,#yellow_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+            </svg>
+          </div>
         </figure>
       </center>
     </div>
@@ -55,147 +68,75 @@
       });
     }
 
-    // Draw graph
-    Highcharts.chart('gauge-container-#id#', {
-      credits: {enabled: false},
-      exporting : {enabled: false},
-      title: {text: null},
-      tooltip: {enabled: false},
-
-      chart: {
-        type: 'solidgauge',
-        backgroundColor: 'transaprent',
-        height: '100%'
-      },
-
-      pane: {
-        startAngle: 0,
-        endAngle: 360,
-        background: [
-        { // Track for Black
-          outerRadius: '99%',
-          innerRadius: '84%',
-          backgroundColor: 'rgba(204,204,204,#black_bkg#)',
-          borderWidth: 0
-        }, { // Track for Cyan
-          outerRadius: '83%',
-          innerRadius: '68%',
-          backgroundColor: 'rgba(204,204,204,#cyan_bkg#)',
-          borderWidth: 0
-        }, { // Track for Magenta
-          outerRadius: '67%',
-          innerRadius: '52%',
-          backgroundColor: 'rgba(204,204,204,#magenta_bkg#)',
-          borderWidth: 0
-        }, { // Track for Yellow
-          outerRadius: '51%',
-          innerRadius: '36%',
-          backgroundColor: 'rgba(204,204,204,#yellow_bkg#)',
-          borderWidth: 0
-        }]
-      },
-
-      yAxis: {
-        min: 0,
-        max: 100,
-        lineWidth: 0,
-        tickPositions: []
-      },
-
-      plotOptions: {
-        solidgauge: {
-          dataLabels: {
-            enabled: false
-          },
-          linecap: 'round',
-          stickyTracking: false,
-          rounded: true,
-          cursor: 'pointer',
-          point: {
-            events: {
-              click: function () {
-                $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=' + this.options.key).dialog('open')
-              }
-            }
-          }
-        }
-      },
-
-      series: [{
-        name: 'Black',
-        data: [{
-          color: 'rgba(0,0,0,#black_visible#)',
-          radius: '99%',
-          innerRadius: '84%',
-          y: #black_level#,
-          key: '#black_id#'
-        }]
-      }, {
-        name: 'Cyan',
-        data: [{
-          color: 'rgba(0,255,255,#cyan_visible#)',
-          radius: '83%',
-          innerRadius: '68%',
-          y: #cyan_level#,
-          key: '#cyan_id#'
-        }]
-      }, {
-        name: 'Magenta',
-        data: [{
-          color: 'rgba(255,0,255,#magenta_visible#)',
-          radius: '67%',
-          innerRadius: '52%',
-          y: #magenta_level#,
-          key: '#magenta_id#'
-        }]
-      }, {
-        name: 'Yellow',
-        data: [{
-          color: 'rgba(255,255,0,#yellow_visible#)',
-          radius: '51%',
-          innerRadius: '36%',
-          y: #yellow_level#,
-          key: '#yellow_id#'
-        }]
-      }]
-    });
-
     // Update Status on value change
-    jeedom.cmd.addUpdateFunction('#brother_status_id#',function(_options) {
-      $('.cmd[data-cmd_id=#brother_status_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
-      $('.cmd[data-cmd_id=#brother_status_id#] .state').empty().append(_options.display_value)
+    jeedom.cmd.addUpdateFunction('#brother_status_id#', function(_options) {
+      document.querySelector('.cmd[data-cmd_id="#brother_status_id#"]').setAttribute('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate);
+      // $('.cmd[data-cmd_id=#brother_status_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
+      document.querySelector('.cmd[data-cmd_id="#brother_status_id#"] .state').empty().append(_options.display_value)
+      // $('.cmd[data-cmd_id=#brother_status_id#] .state').empty().append(_options.display_value)
     });
 
     // Update Counter on value change
-    jeedom.cmd.addUpdateFunction('#brother_counter_id#',function(_options) {
+    jeedom.cmd.addUpdateFunction('#brother_counter_id#', function(_options) {
       $('.cmd[data-cmd_id=#brother_counter_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
       $('.cmd[data-cmd_id=#brother_counter_id#] .state').empty().append(_options.display_value)
     });
 
     // Update Lastprints on value change
-    jeedom.cmd.addUpdateFunction('#brother_lastprints_id#',function(_options) {
+    jeedom.cmd.addUpdateFunction('#brother_lastprints_id#', function(_options) {
       $('.cmd[data-cmd_id=#brother_lastprints_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
       $('.cmd[data-cmd_id=#brother_lastprints_id#] .state').empty().append(_options.display_value)
     });
 
+    // Build SVG path for this arc [inspired of http://xahlee.info/js/svg_circle_arc.html]
+    const f_matrix_times#id# = (([[a, b], [c, d]], [x, y]) => [a * x + b * y, c * x + d * y]);
+    const f_vec_add#id# = (([a1, a2], [b1, b2]) => [a1 + b1, a2 + b2]);
+    function drow_arc#id#(ray, pourcent) {
+        // Cap pourcent between 0 and 99, then convert it in radian
+        as = Math.max(0, Math.min(pourcent, 99)) / 180 * 3.6 * Math.PI % (2 * Math.PI);
+        // Create a rotation matrix for 270°
+        const rotMatrix = [[0, 1], [-1, 0]];
+        // Rotate and deplace the arc
+        const [sX, sY] = f_vec_add#id#(f_matrix_times#id#(rotMatrix, [ray , 0]), [75, 72]);
+        const [eX, eY] = f_vec_add#id#(f_matrix_times#id#(rotMatrix, [ray * Math.cos(as), ray * Math.sin(as)]), [75, 72]);
+        // Return the corresponding SVG path
+        return "M " + sX + " " + sY + " A " + ray + " " + ray + " " + 270 + ((as > Math.PI) ? " 1 " : " 0 ") + ((as > 0) ? "1 " : "0 ") + eX + " " + eY;
+    }
+
     // Update Black on graph on value change
-    jeedom.cmd.addUpdateFunction('#black_id#',function(_options) {
-      $('#gauge-container-#id#').highcharts().series[0].update({data: [{y: _options.value}]});
+    jeedom.cmd.addUpdateFunction('#black_id#', function(_options) {
+      $('#gauge-container-#id# path.blackQte').attr('d', drow_arc#id#(47, _options.value));
+    });
+    jeedom.cmd.refreshValue([{cmd_id :'#black_id#', value: '#black_level#'}]);
+    $('#gauge-container-#id# path.blackQte').on('click', function() {
+        $('#md_modal').dialog({id: 'md_cmdHistory', title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#black_id#').dialog('open');
     });
 
     // Update Cyan on graph on value change
-    jeedom.cmd.addUpdateFunction('#cyan_id#',function(_options) {
-      $('#gauge-container-#id#').highcharts().series[1].update({data: [{y: _options.value}]});
+    jeedom.cmd.addUpdateFunction('#cyan_id#', function(_options) {
+      $('#gauge-container-#id# path.cyanQte').attr('d', drow_arc#id#(38, _options.value));
+    });
+    jeedom.cmd.refreshValue([{cmd_id :'#cyan_id#', value: '#cyan_level#'}]);
+    $('#gauge-container-#id# path.cyanQte').on('click', function() {
+        $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#cyan_id#').dialog('open');
     });
 
     // Update Magenta on graph on value change
-    jeedom.cmd.addUpdateFunction('#magenta_id#',function(_options) {
-      $('#gauge-container-#id#').highcharts().series[2].update({data: [{y: _options.value}]});
+    jeedom.cmd.addUpdateFunction('#magenta_id#', function(_options) {
+      $('#gauge-container-#id# path.magentaQte').attr('d', drow_arc#id#(29, _options.value));
+    });
+    jeedom.cmd.refreshValue([{cmd_id :'#magenta_id#', value: '#magenta_level#'}]);
+    $('#gauge-container-#id# path.magentaQte').on('click', function() {
+        $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#magenta_id#').dialog('open');
     });
 
     // Update Yellow on graph on value change
-    jeedom.cmd.addUpdateFunction('#yellow_id#',function(_options) {
-      $('#gauge-container-#id#').highcharts().series[3].update({data: [{y: _options.value}]});
+    jeedom.cmd.addUpdateFunction('#yellow_id#', function(_options) {
+      $('#gauge-container-#id# path.yellowQte').attr('d', drow_arc#id#(20, _options.value));
+    });
+    jeedom.cmd.refreshValue([{cmd_id :'#yellow_id#', value: '#yellow_level#'}]);
+    $('#gauge-container-#id# path.yellowQte').on('click', function() {
+        $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#yellow_id#').dialog('open');
     });
 
   </script>
