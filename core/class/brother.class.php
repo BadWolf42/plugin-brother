@@ -353,99 +353,38 @@ class brother extends eqLogic {
     }
   }
 
+  private function prepareReplace(&$r, $cmdName) {
+  $cmd = $this->getCmd(null, $cmdName);
+  if (!is_null($cmd) && $cmd->getIsVisible() == 1) {
+    $r['#'.$cmdName.'_id#'] = $cmd->getId();
+    $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
+    $r['#'.$cmdName.'_valueDate#'] = $cmd->getValueDate();
+    $r['#'.$cmdName.'_collectDate#'] = $cmd->getCollectDate();
+    $r['#'.$cmdName.'_hidden#'] = '';
+  } else {
+    $r['#'.$cmdName.'_id#'] = '';
+    $r['#'.$cmdName.'_hidden#'] = 'hidden';
+  }
+}
+
   public function toHtml($_version = 'dashboard') {
     if ($this->getConfiguration('brotherWidget') != 1)
       return parent::toHtml($_version);
     $replace = $this->preToHtml($_version);
     if (!is_array($replace))
       return $replace;
-    $version = jeedom::versionAlias($_version);
 
-    $refreshCmd = $this->getCmd(null, 'refresh');
-    $replace['#refresh_id#'] = ($refreshCmd->getIsVisible() != 1) ? '' : $refreshCmd->getId();
+    $this->prepareReplace($replace, 'refresh');
+    $this->prepareReplace($replace, 'status');
+    $this->prepareReplace($replace, 'counter');
+    $this->prepareReplace($replace, 'lastprints');
 
-    $blackCmd = $this->getCmd(null, 'black');
-    if (!is_null($blackCmd) && $blackCmd->getIsVisible() == 1) {
-      $replace['#black_level#'] = $blackCmd->execCmd();
-      $replace['#black_id#'] = $blackCmd->getId();
-      $replace['#black_visible#'] = 1;
-      $replace['#black_bkg#'] = 0.1;
-    } else {
-      $replace['#black_level#'] = 0;
-      $replace['#black_visible#'] = 0;
-      $replace['#black_bkg#'] = 0;
-    }
+    $this->prepareReplace($replace, 'black');
+    $this->prepareReplace($replace, 'cyan');
+    $this->prepareReplace($replace, 'magenta');
+    $this->prepareReplace($replace, 'yellow');
 
-    $cyanCmd = $this->getCmd(null, 'cyan');
-    if (!is_null($cyanCmd) && $cyanCmd->getIsVisible() == 1) {
-      $replace['#cyan_level#'] = $cyanCmd->execCmd();
-      $replace['#cyan_id#'] = $cyanCmd->getId();
-      $replace['#cyan_visible#'] = 1;
-      $replace['#cyan_bkg#'] = 0.1;
-    } else {
-      $replace['#cyan_level#'] = 0;
-      $replace['#cyan_visible#'] = 0;
-      $replace['#cyan_bkg#'] = 0;
-    }
-
-    $magentaCmd = $this->getCmd(null, 'magenta');
-    if (!is_null($magentaCmd) && $magentaCmd->getIsVisible() == 1) {
-      $replace['#magenta_level#'] = $magentaCmd->execCmd();
-      $replace['#magenta_id#'] = $magentaCmd->getId();
-      $replace['#magenta_visible#'] = 1;
-      $replace['#magenta_bkg#'] = 0.1;
-    } else {
-      $replace['#magenta_level#'] = 0;
-      $replace['#magenta_visible#'] = 0;
-      $replace['#magenta_bkg#'] = 0;
-    }
-
-    $yellowCmd = $this->getCmd(null, 'yellow');
-    if (!is_null($yellowCmd) && $yellowCmd->getIsVisible() == 1) {
-      $replace['#yellow_level#'] = $yellowCmd->execCmd();
-      $replace['#yellow_id#'] = $yellowCmd->getId();
-      $replace['#yellow_visible#'] = 1;
-      $replace['#yellow_bkg#'] = 0.1;
-    } else {
-      $replace['#yellow_level#'] = 0;
-      $replace['#yellow_visible#'] = 0;
-      $replace['#yellow_bkg#'] = 0;
-    }
-
-    $statusCmd = $this->getCmd(null, 'status');
-    if ($statusCmd->getIsVisible() == 1) {
-      $replace['#brother_status#'] = $statusCmd->execCmd();
-      $replace['#brother_status_id#'] = $statusCmd->getId();
-      $replace['#brother_status_uid#'] = $statusCmd->getId();
-      $replace['#brother_status_eqid#'] = $replace['#uid#'];
-      $replace['#brother_status_valueDate#'] = $statusCmd->getValueDate();
-      $replace['#brother_status_collectDate#'] = $statusCmd->getCollectDate();
-    } else {
-      $replace['#brother_status_id#'] = '';
-    }
-    $pagesCmd = $this->getCmd(null, 'counter');
-    if ($pagesCmd->getIsVisible() == 1) {
-      $replace['#brother_counter#'] = $pagesCmd->execCmd();
-      $replace['#brother_counter_id#'] = $pagesCmd->getId();
-      $replace['#brother_counter_uid#'] = $pagesCmd->getId();
-      $replace['#brother_counter_eqid#'] = $replace['#uid#'];
-      $replace['#brother_counter_valueDate#'] = $pagesCmd->getValueDate();
-      $replace['#brother_counter_collectDate#'] = $pagesCmd->getCollectDate();
-    } else {
-      $replace['#brother_counter_id#'] = '';
-    }
-    $lastprintsCmd = $this->getCmd(null, 'lastprints');
-    if ($lastprintsCmd->getIsVisible() == 1) {
-      $replace['#brother_lastprints#'] = $lastprintsCmd->execCmd();
-      $replace['#brother_lastprints_id#'] = $lastprintsCmd->getId();
-      $replace['#brother_lastprints_uid#'] = $lastprintsCmd->getId();
-      $replace['#brother_lastprints_eqid#'] = $replace['#uid#'];
-      $replace['#brother_lastprints_valueDate#'] = $lastprintsCmd->getValueDate();
-      $replace['#brother_lastprints_collectDate#'] = $lastprintsCmd->getCollectDate();
-    } else {
-      $replace['#brother_lastprints_id#'] = '';
-    }
-    $html = template_replace($replace, getTemplate('core', $version, 'brother.template', __CLASS__));
+    $html = template_replace($replace, getTemplate('core', jeedom::versionAlias($_version), 'brother.template', __CLASS__));
     cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
     return $html;
   }

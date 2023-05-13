@@ -58,11 +58,18 @@ function addCmdToTable(_cmd) {
   }
   tr += '</td>';
   tr += '</tr>';
+
+  // document.querySelector('#table_cmd tbody').insertAdjacentHTML('beforeend', tr);
+  // var last = document.querySelectorAll('#table_cmd tbody tr').last();
+  // last.setJeeValues(_cmd, '.cmdAttr')
   $('#table_cmd tbody').append(tr);
   $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 
-  if (isset(_cmd.type))
+  if (isset(_cmd.type)) {
+    // last.querySelector('.cmdAttr[data-l1key="type"]').value = init(_cmd.type);
     $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+  }
 
+  // jeedom.cmd.changeType(last, init(_cmd.subType));
   jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }

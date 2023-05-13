@@ -11,16 +11,16 @@
         <figure style="width: 150px;margin-left: 5px;margin-top: 5px;margin-bottom: 5px;margin-right: 5px;">
           <div id="gauge-container-#id#">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150">
-              <defs></defs>
-              <circle cx="75" cy="72" r="53" fill="transparent" stroke="grey"></circle>
-              <circle cx="75" cy="72" r="47" fill="transparent" stroke="rgba(204,204,204,#black_bkg#)" stroke-width="8" />
-              <circle cx="75" cy="72" r="38" fill="transparent" stroke="rgba(204,204,204,#cyan_bkg#)" stroke-width="8" />
-              <circle cx="75" cy="72" r="29" fill="transparent" stroke="rgba(204,204,204,#magenta_bkg#)" stroke-width="8" />
-              <circle cx="75" cy="72" r="20" fill="transparent" stroke="rgba(204,204,204,#yellow_bkg#)" stroke-width="8" />
-              <path class="blackQte" d="M 75 25 A 47 47 270 0 1 107.66 105.79" stroke="rgba(0,0,0,#black_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
-              <path class="cyanQte" d="M 75 34 A 38 38 270 0 1 101.41 99.32" stroke="rgba(0,255,255,#cyan_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
-              <path class="magentaQte" d="M 75 43 A 29 29 270 0 1 95.15 92.85" stroke="rgba(255,0,255,#magenta_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
-              <path class="yellowQte" d="M 75 52 A 20 20 270 0 1 88.90 86.38" stroke="rgba(255,255,0,#yellow_visible#)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <defs />
+              <circle cx="75" cy="72" r="53" fill="transparent" stroke="grey" />
+              <circle class="#black_hidden#" cmd-id="#black_id#" cx="75" cy="72" r="47" fill="transparent" stroke="rgba(204,204,204,0.1)" stroke-width="8" />
+              <circle class="#cyan_hidden#" cmd-id="#cyan_id#" cx="75" cy="72" r="38" fill="transparent" stroke="rgba(204,204,204,0.1)" stroke-width="8" />
+              <circle class="#magenta_hidden#" cmd-id="#magenta_id#" cx="75" cy="72" r="29" fill="transparent" stroke="rgba(204,204,204,0.1)" stroke-width="8" />
+              <circle class="#yellow_hidden#" cmd-id="#yellow_id#" cx="75" cy="72" r="20" fill="transparent" stroke="rgba(204,204,204,0.1)" stroke-width="8" />
+              <path class="#black_hidden# blackQte" cmd-id="#black_id#" d="M 75 25 A 47 47 270 0 1 107.66 105.79" stroke="rgb(0,0,0)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <path class="#cyan_hidden# cyanQte" cmd-id="#cyan_id#" d="M 75 34 A 38 38 270 0 1 101.41 99.32" stroke="rgb(0,255,255)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <path class="#magenta_hidden# magentaQte" cmd-id="#magenta_id#" d="M 75 43 A 29 29 270 0 1 95.15 92.85" stroke="rgb(255,0,255)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
+              <path class="#yellow_hidden# yellowQte" cmd-id="#yellow_id#" d="M 75 52 A 20 20 270 0 1 88.90 86.38" stroke="rgb(255,255,0)" fill="transparent" stroke-width="7" fill-opacity="0.5" stroke-linecap="round" />
             </svg>
           </div>
         </figure>
@@ -28,29 +28,29 @@
     </div>
     <div style="width: 50%; float: right;">
       <center>
-        <div class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#brother_status_id#" title="Date de valeur : #brother_status_valueDate#<br/>Date de collecte : #brother_status_collectDate#">
+        <div class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#status_id#" title="">
           <div class="content-xs">
-            <span class="cmdName ">Status </span> <strong class="state">#brother_status#</strong>
+            <span class="cmdName ">Status </span> <strong class="state"></strong>
           </div>
         </div>
         <br/>
-        <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_counter_id#" title="Date de valeur : #brother_counter_valueDate#<br/>Date de collecte : #brother_counter_collectDate#">
+        <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#counter_id#" title="">
           <div class="title ">
             <div class="cmdName">Pages</div>
           </div>
           <div class="content-sm">
             <span class="pull-right"></span>
-            <span class="pull-right state">#brother_counter#</span>
+            <span class="pull-right state"></span>
           </div>
         </div>
         <br/>
-        <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#brother_lastprints_id#" title="Date de valeur : #brother_lastprints_valueDate#<br/>Date de collecte : #brother_lastprints_collectDate#">
+        <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#lastprints_id#" title="">
           <div class="title ">
             <div class="cmdName">Dernières impressions</div>
           </div>
           <div class="content-sm">
             <span class="pull-right"></span>
-            <span class="pull-right state">#brother_lastprints#</span>
+            <span class="pull-right state"></span>
           </div>
         </div>
       </center>
@@ -59,84 +59,111 @@
   #divGraphInfo#
   <script>
     // Remove all unused cmd (empty id)
-    $('.eqLogic[data-eqLogic_uid=#uid#] [data-cmd_id=""]').remove();
+    document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] [data-cmd_id=""]')?.remove();
 
     // Enable manual refresh
     if ('#refresh_id#' != '') {
-      $('.cmd[data-cmd_id=#refresh_id#]').off('click').on('click', function () {
+      document.querySelector('.cmd[data-cmd_id="#refresh_id#"]').addEventListener('click', function(event) {
         jeedom.cmd.execute({id: '#refresh_id#'});
       });
     }
 
     // Update Status on value change
-    jeedom.cmd.addUpdateFunction('#brother_status_id#', function(_options) {
-      document.querySelector('.cmd[data-cmd_id="#brother_status_id#"]').setAttribute('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate);
-      // $('.cmd[data-cmd_id=#brother_status_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
-      document.querySelector('.cmd[data-cmd_id="#brother_status_id#"] .state').empty().append(_options.display_value)
-      // $('.cmd[data-cmd_id=#brother_status_id#] .state').empty().append(_options.display_value)
-    });
+    if ('#status_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#status_id#', function(_options) {
+        var _target = document.querySelector('.cmd[data-cmd_id="#status_id#"]')
+        if (!_target) return;
+        _target.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate);
+        _target.querySelector('.state').innerHTML = _options.value;
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#status_id#', value: '#status_value#', valueDate: '#status_valueDate#', collectDate: '#status_collectDate#'}]);
+    }
 
     // Update Counter on value change
-    jeedom.cmd.addUpdateFunction('#brother_counter_id#', function(_options) {
-      $('.cmd[data-cmd_id=#brother_counter_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
-      $('.cmd[data-cmd_id=#brother_counter_id#] .state').empty().append(_options.display_value)
-    });
+    if ('#counter_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#counter_id#', function(_options) {
+        var _target = document.querySelector('.cmd[data-cmd_id="#counter_id#"]')
+        if (!_target) return;
+        _target.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate);
+        _target.querySelector('.state').innerHTML = _options.value;
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#counter_id#', value: '#counter_value#', valueDate: '#counter_valueDate#', collectDate: '#counter_collectDate#'}]);
+    }
 
     // Update Lastprints on value change
-    jeedom.cmd.addUpdateFunction('#brother_lastprints_id#', function(_options) {
-      $('.cmd[data-cmd_id=#brother_lastprints_id#]').attr('title', ' : '+_options.valueDate+'<br/> : '+_options.collectDate)
-      $('.cmd[data-cmd_id=#brother_lastprints_id#] .state').empty().append(_options.display_value)
-    });
+    if ('#lastprints_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#lastprints_id#', function(_options) {
+        var _target = document.querySelector('.cmd[data-cmd_id="#lastprints_id#"]')
+        if (!_target) return;
+        _target.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate);
+        _target.querySelector('.state').innerHTML = _options.value;
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#lastprints_id#', value: '#lastprints_value#', valueDate: '#lastprints_valueDate#', collectDate: '#lastprints_collectDate#'}]);
+    }
+
 
     // Build SVG path for this arc [inspired of http://xahlee.info/js/svg_circle_arc.html]
-    const f_matrix_times#id# = (([[a, b], [c, d]], [x, y]) => [a * x + b * y, c * x + d * y]);
-    const f_vec_add#id# = (([a1, a2], [b1, b2]) => [a1 + b1, a2 + b2]);
-    function drow_arc#id#(ray, pourcent) {
-        // Cap pourcent between 0 and 99, then convert it in radian
-        as = Math.max(0, Math.min(pourcent, 99)) / 180 * 3.6 * Math.PI % (2 * Math.PI);
-        // Create a rotation matrix for 270°
-        const rotMatrix = [[0, 1], [-1, 0]];
-        // Rotate and deplace the arc
-        const [sX, sY] = f_vec_add#id#(f_matrix_times#id#(rotMatrix, [ray , 0]), [75, 72]);
-        const [eX, eY] = f_vec_add#id#(f_matrix_times#id#(rotMatrix, [ray * Math.cos(as), ray * Math.sin(as)]), [75, 72]);
-        // Return the corresponding SVG path
-        return "M " + sX + " " + sY + " A " + ray + " " + ray + " " + 270 + ((as > Math.PI) ? " 1 " : " 0 ") + ((as > 0) ? "1 " : "0 ") + eX + " " + eY;
+    if (drow_arc === undefined) {
+      const f_matrix_times = (([[a, b], [c, d]], [x, y]) => [a * x + b * y, c * x + d * y]);
+      const f_vec_add = (([a1, a2], [b1, b2]) => [a1 + b1, a2 + b2]);
+      function drow_arc(ray, pourcent) {
+          // Cap pourcent between 0 and 99, then convert it in radian
+          as = Math.max(0, Math.min(pourcent, 99)) / 180 * 3.6 * Math.PI % (2 * Math.PI);
+          // Create a rotation matrix for 270°
+          const rotMatrix = [[0, 1], [-1, 0]];
+          // Rotate and deplace the arc
+         const [sX, sY] = f_vec_add(f_matrix_times(rotMatrix, [ray , 0]), [75, 72]);
+          const [eX, eY] = f_vec_add(f_matrix_times(rotMatrix, [ray * Math.cos(as), ray * Math.sin(as)]), [75, 72]);
+          // Return the corresponding SVG path
+          return "M " + sX + " " + sY + " A " + ray + " " + ray + " " + 270 + ((as > Math.PI) ? " 1 " : " 0 ") + ((as > 0) ? "1 " : "0 ") + eX + " " + eY;
+      }
     }
 
     // Update Black on graph on value change
-    jeedom.cmd.addUpdateFunction('#black_id#', function(_options) {
-      $('#gauge-container-#id# path.blackQte').attr('d', drow_arc#id#(47, _options.value));
-    });
-    jeedom.cmd.refreshValue([{cmd_id :'#black_id#', value: '#black_level#'}]);
-    $('#gauge-container-#id# path.blackQte').on('click', function() {
-        $('#md_modal').dialog({id: 'md_cmdHistory', title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#black_id#').dialog('open');
-    });
+    if ('#black_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#black_id#', function(_options) {
+        document.querySelector('#gauge-container-#id# path.blackQte')?.setAttribute('d', drow_arc(47, _options.value));
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#black_id#', value: '#black_value#'}]);
+    }
 
     // Update Cyan on graph on value change
-    jeedom.cmd.addUpdateFunction('#cyan_id#', function(_options) {
-      $('#gauge-container-#id# path.cyanQte').attr('d', drow_arc#id#(38, _options.value));
-    });
-    jeedom.cmd.refreshValue([{cmd_id :'#cyan_id#', value: '#cyan_level#'}]);
-    $('#gauge-container-#id# path.cyanQte').on('click', function() {
-        $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#cyan_id#').dialog('open');
-    });
+    if ('#cyan_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#cyan_id#', function(_options) {
+        document.querySelector('#gauge-container-#id# path.cyanQte')?.setAttribute('d', drow_arc(38, _options.value));
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#cyan_id#', value: '#cyan_value#'}]);
+    }
 
     // Update Magenta on graph on value change
-    jeedom.cmd.addUpdateFunction('#magenta_id#', function(_options) {
-      $('#gauge-container-#id# path.magentaQte').attr('d', drow_arc#id#(29, _options.value));
-    });
-    jeedom.cmd.refreshValue([{cmd_id :'#magenta_id#', value: '#magenta_level#'}]);
-    $('#gauge-container-#id# path.magentaQte').on('click', function() {
-        $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#magenta_id#').dialog('open');
-    });
+    if ('#magenta_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#magenta_id#', function(_options) {
+        document.querySelector('#gauge-container-#id# path.magentaQte')?.setAttribute('d', drow_arc(29, _options.value));
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#magenta_id#', value: '#magenta_value#'}]);
+    }
 
     // Update Yellow on graph on value change
-    jeedom.cmd.addUpdateFunction('#yellow_id#', function(_options) {
-      $('#gauge-container-#id# path.yellowQte').attr('d', drow_arc#id#(20, _options.value));
-    });
-    jeedom.cmd.refreshValue([{cmd_id :'#yellow_id#', value: '#yellow_level#'}]);
-    $('#gauge-container-#id# path.yellowQte').on('click', function() {
-        $('#md_modal2').dialog({title: "{{Historique}}"}).load('index.php?v=d&modal=cmd.history&id=#yellow_id#').dialog('open');
+    if ('#yellow_id#' != '') {
+      jeedom.cmd.addUpdateFunction('#yellow_id#', function(_options) {
+        document.querySelector('#gauge-container-#id# path.yellowQte')?.setAttribute('d', drow_arc(20, _options.value));
+      });
+      jeedom.cmd.refreshValue([{cmd_id :'#yellow_id#', value: '#yellow_value#'}]);
+    }
+
+    // Add access to history on gauge
+    document.querySelector('#gauge-container-#id#').addEventListener('click', function(event) {
+      if (!event.target.classList.contains('hidden') && event.target.hasAttribute('cmd-id')) {
+        if (typeof jeeDialog !== 'undefined') {
+          jeeDialog.dialog({
+           id: 'md_cmdHistory',
+           title: 'Historique',
+           contentUrl: 'index.php?v=d&modal=cmd.history&id=' + event.target.getAttribute('cmd-id')
+           });
+        } else {
+          $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id='+event.target.getAttribute('cmd-id')).dialog('open');
+        }
+      }
     });
 
   </script>
