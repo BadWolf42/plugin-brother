@@ -4,6 +4,9 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# Stable - 14/05/2023 (v5)
+- Correction de problèmes avec le widget sur Jeedom 4.4
+
 # Stable - 30/04/2023 (v4)
 - **Le widget sur le Dashboard est maintenant mis à jour lors du changement d'une valeur**
 - **Changement du logo, en utilisant du jaune au lieu du bleu foncé**

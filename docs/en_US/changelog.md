@@ -4,6 +4,9 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
+# Stable - 14/05/2023 (v5)
+- Fixed issues with widget on Jeedom 4.4
+
 # Stable - 30/04/2023 (v4)
 - **The widget on the Dashboard is now updated when changing a value**
 - **Logo update, using yellow instead of dark blue**
