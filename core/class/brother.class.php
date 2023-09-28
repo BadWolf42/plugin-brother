@@ -354,18 +354,18 @@ class brother extends eqLogic {
   }
 
   private function prepareReplace(&$r, $cmdName) {
-  $cmd = $this->getCmd(null, $cmdName);
-  if (!is_null($cmd) && $cmd->getIsVisible() == 1) {
-    $r['#'.$cmdName.'_id#'] = $cmd->getId();
-    $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
-    $r['#'.$cmdName.'_valueDate#'] = $cmd->getValueDate();
-    $r['#'.$cmdName.'_collectDate#'] = $cmd->getCollectDate();
-    $r['#'.$cmdName.'_hidden#'] = '';
-  } else {
-    $r['#'.$cmdName.'_id#'] = '';
-    $r['#'.$cmdName.'_hidden#'] = 'hidden';
+    $cmd = $this->getCmd(null, $cmdName);
+    if (!is_null($cmd) && $cmd->getIsVisible() == 1) {
+      $r['#'.$cmdName.'_id#'] = $cmd->getId();
+      $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
+      $r['#'.$cmdName.'_valueDate#'] = $cmd->getValueDate();
+      $r['#'.$cmdName.'_collectDate#'] = $cmd->getCollectDate();
+      $r['#'.$cmdName.'_hidden#'] = '';
+    } else {
+      $r['#'.$cmdName.'_id#'] = '';
+      $r['#'.$cmdName.'_hidden#'] = 'hidden';
+    }
   }
-}
 
   public function toHtml($_version = 'dashboard') {
     if ($this->getConfiguration('brotherWidget') != 1)
@@ -399,7 +399,7 @@ class brotherCmd extends cmd {
       $visible = $eqLogic->getConfiguration('brotherColorType',1);
       $this->setIsVisible($visible);
     }
-}
+  }
 
   public function dontRemoveCmd() {
     return true;
