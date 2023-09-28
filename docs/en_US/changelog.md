@@ -1,8 +1,12 @@
-# Changelog 
+# Changelog
 
 >**Important**
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
+
+# Beta - 29/09/2023 (v6)
+- Fixed issue with [pyasn1 package](https://community.jeedom.com/t/107671) (using a Python3 venv)
+- Fix some log levels (too verbose)
 
 # Stable - 14/05/2023 (v5)
 - Fixed issues with widget on Jeedom 4.4
@@ -53,11 +57,11 @@
 # Beta - 11/02/2022
 - Python package logging level respect Jeedom logging config
 - Gauge items clickable for history
-- Grey background on gauge for better visibility of black ink 
+- Grey background on gauge for better visibility of black ink
 
 # Beta - 10/02/2022
 - Choice of printer's type (color or back & white)
-- Smaller widget with status and page counters information 
+- Smaller widget with status and page counters information
 - Widget compatible with visible status of commands
 
 # Beta - 07/02/2022

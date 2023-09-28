@@ -4,6 +4,10 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# Beta - 29/09/2023 (v6)
+- Correction d'un [problème avec le packet pyasn1](https://community.jeedom.com/t/107671) (en utilisant un venv Python3)
+- Correction du niveau de certains journaux (trop verbeux)
+
 # Stable - 14/05/2023 (v5)
 - Correction de problèmes avec le widget sur Jeedom 4.4
 
@@ -66,4 +70,3 @@
 
 # Beta - 06/02/2022
 - Première version (beta)
-
