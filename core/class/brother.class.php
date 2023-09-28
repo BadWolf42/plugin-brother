@@ -94,6 +94,68 @@ class brother extends eqLogic {
     }
   }
 
+  /**
+   * Provides dependancy information
+   */
+  public static function dependancy_info() {
+    $depLogFile = __CLASS__ . '_dep';
+    $depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
+
+    $return = array();
+    $return['log'] = log::getPathToLog($depLogFile);
+    $return['progress_file'] = $depProgressFile;
+    $return['state'] = 'ok';
+
+    if (file_exists($depProgressFile)) {
+      log::add(__CLASS__, 'debug', sprintf(__("Dépendances en cours d'installation... (%s%%)", __FILE__), trim(file_get_contents($depProgressFile))));
+      $return['state'] = 'nok';
+      return $return;
+    }
+
+    if (!file_exists(__DIR__ . '/../../resources/venv/bin/pip3') || !file_exists(__DIR__ . '/../../resources/venv/bin/python3')) {
+      log::add(__CLASS__, 'debug', __("Relancez les dépendances, le venv Python n'a pas encore été créé", __FILE__));
+      $return['state'] = 'nok';
+    } else {
+      exec(__DIR__ . '/../../resources/venv/bin/pip3 freeze --no-cache-dir -r '.__DIR__ . '/../../resources/requirements.txt 2>&1 >/dev/null', $output);
+      if (count($output) > 0) {
+        log::add(__CLASS__, 'error', __('Relancez les dépendances, au moins une bibliothèque Python requise est manquante dans le venv :', __FILE__).' <br/>'.implode('<br/>', $output));
+        $return['state'] = 'nok';
+      }
+    }
+
+    if ($return['state'] == 'ok')
+      log::add(__CLASS__, 'debug', sprintf(__('Dépendances installées.', __FILE__)));
+    return $return;
+  }
+
+  /**
+   * Provides dependancy installation script
+   */
+  public static function dependancy_install() {
+    $depLogFile = __CLASS__ . '_dep';
+    $depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
+
+    log::add(__CLASS__, 'info', sprintf(__('Installation des dépendances, voir log dédié (%s)', __FILE__), $depLogFile));
+
+    $update = update::byLogicalId(__CLASS__);
+    shell_exec(
+      'echo "\n\n================================================================================\n'.
+      '== Jeedom '.jeedom::version().' '.jeedom::getHardwareName().
+      ' in $(lsb_release -d -s | xargs echo -n) on $(arch | xargs echo -n)/'.
+      '$(dpkg --print-architecture | xargs echo -n)/$(getconf LONG_BIT | xargs echo -n)bits\n'.
+      '== $(python3 -VV | xargs echo -n)\n'.
+      '== '.__CLASS__.' v'.config::byKey('version', __CLASS__, 'unknown', true).
+      ' ('.$update->getLocalVersion().') branch:'.$update->getConfiguration()['version'].
+      ' previously:v'.config::byKey('previousVersion', __CLASS__, 'unknown', true).
+      '" >> '.log::getPathToLog($depLogFile)
+    );
+
+    return array(
+      'script' => __DIR__ . '/../../resources/install_#stype#.sh ' . $depProgressFile,
+      'log' => log::getPathToLog($depLogFile)
+    );
+  }
+
   public static function executeManualRefresh() {
     self::cronHourly();
     log::add(__CLASS__, 'debug', 'Manual refresh executed');
@@ -280,7 +342,8 @@ class brother extends eqLogic {
     if ($comp !== '') $comp .= '/';
     $cmd .= "CALLBACK='http://localhost:".$port."/".$comp."plugins/brother/core/php/callback.php";
     $cmd .= "?apikey=".jeedom::getApiKey(__CLASS__)."&eqId=".$this->getId()."' ";
-    $cmd .= 'python3 ' . realpath(__DIR__ . '/../../resources/jeeBrother.py') . ' ';
+    $cmd .= realpath(__DIR__ . '/../../resources/venv/bin') . '/python3 ';
+    $cmd .= realpath(__DIR__ . '/../../resources') . '/jeeBrother.py ';
     $cmd .= $this->getConfiguration('brotherAddress') . ' ';
     $cmd .= $this->getConfiguration('brotherType') . ' ';
     $cmd .= ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1 &';
