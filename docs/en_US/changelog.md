@@ -4,6 +4,10 @@
 >
 >As a reminder if there is no information on the update, it means that it only concerns the updating of documentation, translation or text.
 
+
+# Stable - 01/10/2023 (v6)
+- Last Beta is now Stable
+
 # Beta - 29/09/2023 (v6)
 - Fixed issue with [pyasn1 package](https://community.jeedom.com/t/107671) (using a Python3 venv)
 - Fix some log levels (too verbose)
