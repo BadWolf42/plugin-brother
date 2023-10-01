@@ -4,7 +4,7 @@
     "description": "Ce plugin récupère les informations de votre imprimante Brother en utilisant SNMP, notamment les niveaux d'encre (jet d'encre ou laser).",
     "utilization": "Sur la page de l'équipement, renseignez l'adresse IP ou le hostname de votre imprimante, son type (jet d'ecnre ou laser), puis cliquez sur le bouton Sauvegarder.",
     "licence": "AGPL",
-    "author": "BadWolf",
+    "author": "Bad",
     "require": "4.3.0",
     "category": "monitoring",
     "hasDependency": true,

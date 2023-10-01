@@ -4,6 +4,10 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+
+# Stable - 01/10/2023 (v6)
+- Passage de la dernière beta en stable
+
 # Beta - 29/09/2023 (v6)
 - Correction d'un [problème avec le packet pyasn1](https://community.jeedom.com/t/107671) (en utilisant un venv Python3)
 - Correction du niveau de certains journaux (trop verbeux)
