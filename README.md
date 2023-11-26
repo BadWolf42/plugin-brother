@@ -9,9 +9,9 @@
 __________________
 
 <p align="center">
-<a href="https://community.jeedom.com/tag/plugin-brother">Community</a> -
-<a href="https://docs.bad.wf/fr_FR/brother/dev/index">Documentation</a> -
-<a href="https://docs.bad.wf/fr_FR/brother/changelog">Change Log</a>
+<a href="https://community.jeedom.com/tag/plugin-brother" target="_blank">Community</a> -
+<a href="https://docs.bad.wf/fr_FR/brother/dev/index" target="_blank">Documentation</a> -
+<a href="https://docs.bad.wf/fr_FR/brother/changelog" target="_blank">Changelog</a>
 </p>
 
 __________________
@@ -47,7 +47,7 @@ This plugin relies on the work done by:
 __________________
 
 <p align="center">
-<a href="https://community.jeedom.com/tag/plugin-brother">Community</a> -
-<a href="https://docs.bad.wf/fr_FR/brother/dev/index">Documentation</a> -
-<a href="https://docs.bad.wf/fr_FR/brother/changelog">Change Log</a>
+<a href="https://community.jeedom.com/tag/plugin-brother" target="_blank">Community</a> -
+<a href="https://docs.bad.wf/fr_FR/brother/dev/index" target="_blank">Documentation</a> -
+<a href="https://docs.bad.wf/fr_FR/brother/changelog" target="_blank">Changelog</a>
 </p>
