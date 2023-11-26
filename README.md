@@ -11,7 +11,7 @@ __________________
 <p align="center">
 <a href="https://community.jeedom.com/tag/plugin-brother">Community</a> -
 <a href="https://docs.bad.wf/fr_FR/brother/dev/index">Documentation</a> -
-<a href="https://docs.bad.wf/fr_FR/brother/dev/changelog">Change Log</a>
+<a href="https://docs.bad.wf/fr_FR/brother/changelog">Change Log</a>
 </p>
 
 __________________
@@ -49,5 +49,5 @@ __________________
 <p align="center">
 <a href="https://community.jeedom.com/tag/plugin-brother">Community</a> -
 <a href="https://docs.bad.wf/fr_FR/brother/dev/index">Documentation</a> -
-<a href="https://docs.bad.wf/fr_FR/brother/dev/changelog">Change Log</a>
+<a href="https://docs.bad.wf/fr_FR/brother/changelog">Change Log</a>
 </p>

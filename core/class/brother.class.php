@@ -146,7 +146,6 @@ class brother extends eqLogic {
       '== $(python3 -VV | xargs echo -n)\n'.
       '== '.__CLASS__.' v'.config::byKey('version', __CLASS__, 'unknown', true).
       ' ('.$update->getLocalVersion().') branch:'.$update->getConfiguration()['version'].
-      ' previously:v'.config::byKey('previousVersion', __CLASS__, 'unknown', true).
       '" >> '.log::getPathToLog($depLogFile)
     );
 

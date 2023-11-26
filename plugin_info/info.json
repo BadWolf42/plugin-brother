@@ -15,8 +15,7 @@
     "hasOwnDeamon": false,
     "maxDependancyInstallTime": 0,
     "issue": "https://github.com/badwolf42/plugin-brother/issues",
-    "changelog": "https://docs.bad.wf/#language#/brother/stable/changelog",
-    "changelog_beta": "https://docs.bad.wf/#language#/brother/beta/changelog",
+    "changelog": "https://docs.bad.wf/#language#/brother/changelog",
     "documentation": "https://docs.bad.wf/#language#/brother/stable/index",
     "documentation_beta": "https://docs.bad.wf/#language#/brother/beta/index",
     "link": {
