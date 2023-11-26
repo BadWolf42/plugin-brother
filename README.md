@@ -1,3 +1,13 @@
+[![stable version number](https://img.shields.io/badge/dynamic/json?url=https://github.com/BadWolf42/plugin-brother/raw/stable/plugin_info/info.json&query=$.pluginVersion&label=Stable%20version%20is)](https://github.com/BadWolf42/plugin-brother/tree/stable)
+[![beta version number](https://img.shields.io/badge/dynamic/json?url=https://github.com/BadWolf42/plugin-brother/raw/beta/plugin_info/info.json&query=$.pluginVersion&label=Beta%20version%20is)](https://github.com/BadWolf42/plugin-brother/tree/beta)
+[![dev version number](https://img.shields.io/badge/dynamic/json?url=https://github.com/BadWolf42/plugin-brother/raw/dev/plugin_info/info.json&query=$.pluginVersion&label=Dev%20version%20is)](https://github.com/BadWolf42/plugin-brother/tree/dev)
+<br/>
+[![dev jeedom version min](https://img.shields.io/badge/dynamic/json?url=https://github.com/BadWolf42/plugin-brother/raw/dev/plugin_info/info.json&query=$.require&label=Supports%20Jeedom%20%3e%3d%20)](https://doc.jeedom.com/)
+[![commit activity](https://img.shields.io/github/commit-activity/m/BadWolf42/plugin-brother)](https://github.com/BadWolf42/plugin-brother/pulse)
+[![last commit](https://img.shields.io/github/last-commit/BadWolf42/plugin-brother)](https://GitHub.com/BadWolf42/plugin-brother)
+
+__________________
+
 <p align="center">
 <a href="https://community.jeedom.com/tag/plugin-brother">Community</a> -
 <a href="https://docs.bad.wf/fr_FR/brother/dev/index">Documentation</a> -
