@@ -1,8 +1,12 @@
 {
     "id": "brother",
     "name": "Brother",
-    "description": "Ce plugin récupère les informations de votre imprimante Brother en utilisant SNMP, notamment les niveaux d'encre (jet d'encre ou laser).",
+    "description": {
+        "fr_FR": "Ce plugin récupère les informations de votre imprimante Brother en utilisant SNMP, notamment les niveaux d'encre (jet d'encre ou laser).",
+        "en_US": "This plugin retrieves information from your Brother printer using SNMP, including ink levels (inkjet or laser)."
+    },
     "utilization": "Sur la page de l'équipement, renseignez l'adresse IP ou le hostname de votre imprimante, son type (jet d'ecnre ou laser), puis cliquez sur le bouton Sauvegarder.",
+    "utilization_en_US": "On the equipment page, enter the IP address or hostname of your printer, its type (ecnjet or laser), then click on the Save button.",
     "licence": "AGPL",
     "author": "Bad",
     "require": "4.3.0",
@@ -11,11 +15,15 @@
     "hasOwnDeamon": false,
     "maxDependancyInstallTime": 0,
     "issue": "https://github.com/badwolf42/plugin-brother/issues",
-    "changelog": "https://badwolf42.github.io/plugin-brother/#language#/changelog",
-    "changelog_beta": "https://badwolf42.github.io/plugin-brother/#language#/changelog",
-    "documentation": "https://badwolf42.github.io/plugin-brother/#language#/",
-    "documentation_beta": "https://badwolf42.github.io/plugin-brother/#language#/",
-    "link": {"forum": "https://community.jeedom.com/tag/plugin-brother"},
+    "changelog": "https://docs.bad.wf/#language#/brother/stable/changelog",
+    "changelog_beta": "https://docs.bad.wf/#language#/brother/beta/changelog",
+    "documentation": "https://docs.bad.wf/#language#/brother/stable/index",
+    "documentation_beta": "https://docs.bad.wf/#language#/brother/beta/index",
+    "link": {
+        "community": "https://community.jeedom.com/tag/plugin-brother",
+        "forum": "https://community.jeedom.com/tag/plugin-brother",
+        "github": "https://github.com/BadWolf42/plugin-brother"
+    },
     "language": ["fr_FR", "en_US"],
     "compatibility": ["atlas", "diy", "docker", "luna", "miniplus", "rpi", "smart", "v4"],
     "pluginVersion": 6
