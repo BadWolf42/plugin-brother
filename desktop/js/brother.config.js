@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // Display the real version number (X.Y.Z) just before the plugin version number (YYYY-MM-DD hh:mm:ss)
+    // Display the real version number just before the plugin version number (YYYY-MM-DD hh:mm:ss)
     var dateVersion = $("#span_plugin_install_date").html();
     $("#span_plugin_install_date").empty().append("v" + version + " (" + dateVersion + ")");
 

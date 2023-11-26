@@ -20,5 +20,7 @@ include_file('core', 'authentification', 'php');
 if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
+
+sendVarToJS('version', config::byKey('version', 'brother', 'unknown', true));
+include_file('desktop', 'brother.config', 'js', 'brother');
 ?>
-<?php include_file('desktop', 'brother.config', 'js', 'jMQTT'); ?>
