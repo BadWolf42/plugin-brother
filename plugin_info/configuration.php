@@ -21,3 +21,4 @@ if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
+<?php include_file('desktop', 'brother.config', 'js', 'jMQTT'); ?>
