@@ -28,6 +28,7 @@ class brother extends eqLogic {
   /* * ***********************Methode static*************************** */
 
   public static function cronHourly() {
+    /** @var brother $eqLogic */
     foreach (self::byType(__CLASS__, true) as $eqLogic)
       $eqLogic->refreshInfo();
     self::pluginStats();
@@ -480,6 +481,7 @@ class brotherCmd extends cmd {
   }
 
   public function execute($_options = null) {
+    /** @var brother $eqLogic */
     $eqLogic = $this->getEqLogic();
     if (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)
       throw new Exception(sprintf(__("Equipement desactivé impossible d'éxecuter la commande : %s", __FILE__), $this->getHumanName()));
