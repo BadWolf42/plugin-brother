@@ -37,57 +37,69 @@ class brother extends eqLogic {
     // Check last reporting (or if forced)
     $nextStats = @cache::byKey('brother::nextStats')->getValue(0);
     if ($_reason === 'cron' && (time() < $nextStats)) { // No reason to force send stats
-      // log::add(__CLASS__, 'debug', sprintf(__("Aucune raison d'envoyer des données statistiques avant le %s", __FILE__), date('Y-m-d H:i:s', $nextStats)));
+      // log::add(__CLASS__,'debug', "No need before " . date('Y-m-d H:i:s', $nextStats));
       return;
     }
-    // Ensure next attempt will be in at least 5 minutes
-    cache::set('brother::nextStats', time() + 300 + rand(0, 300)); // in 5-10 mins
+    // Ensure between 5 and 10 minutes before next attempt
+    cache::set('brother::nextStats', time() + 300 + rand(0, 300));
+    // Avoid getting all stats exactly at the same time
+    sleep(rand(0, 10));
 
-    $url = 'https://stats.bad.wf/brother.php';
+    $url = 'https://stats.bad.wf/v1/query';
     $data = array();
-    $data['version'] = 1;
+    $data['plugin'] = 'brother';
     $data['hardwareKey'] = jeedom::getHardwareKey();
     // Ensure system unicity using a rotating UUID
     $data['lastUUID'] = config::byKey('installUUID', __CLASS__, $data['hardwareKey']);
-    $data['UUID'] = base64_encode(hash('sha384', microtime() . random_bytes('107'), true));
+    $data['UUID'] = base64_encode(hash('sha384', microtime() . random_bytes(107), true));
     $data['hardwareName'] = jeedom::getHardwareName();
+    if ($data['hardwareName'] == 'diy')
+      $data['hardwareName'] = trim(shell_exec('systemd-detect-virt'));
+    if ($data['hardwareName'] == 'none')
+      $data['hardwareName'] = 'diy';
     $data['distrib'] = trim(shell_exec('. /etc/*-release && echo $ID $VERSION_ID'));
     $data['phpVersion'] = phpversion();
+    $data['pythonVersion'] = trim(shell_exec("python3 -V | cut -d ' ' -f 2"));
     $data['jeedom'] = jeedom::version();
     $data['lang'] = config::byKey('language', 'core', 'fr_FR');
+    $data['lang'] = ($data['lang'] != '') ? $data['lang'] : 'fr_FR';
     $plugin = update::byLogicalId(__CLASS__);
     $data['source'] = $plugin->getSource();
     $data['branch'] = $plugin->getConfiguration('version', 'unknown');
     $data['configVersion'] = config::byKey('version', __CLASS__, -1);
     $data['reason'] = $_reason;
     if ($_reason == 'uninstall' || $_reason == 'noStats')
-      $data['removeMe'] = true;
+      $data['next'] = 0;
     else
       $data['next'] = time() + 432000 + rand(0, 172800); // Next stats in 5-7 days
-    $options = array('http' => array(
-      'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-      'method'  => 'POST', 'content' => http_build_query($data)
-    ));
-    log::add(__CLASS__, 'debug', sprintf(__('Transmission des données statistiques suivantes : %s', __FILE__), json_encode($data)));
+    $encoded = json_encode($data);
+    $options = array(
+      'http' => array(
+        'method'  => 'POST',
+        'header'  => "Content-Type: application/json\r\n",
+        'content' => $encoded
+      )
+    );
+    log::add(__CLASS__, 'debug', "Anonymous statistical data have been sent: " . $encoded);
     $context = stream_context_create($options);
     $result = @file_get_contents($url, false, $context);
 
     if ($result === false) {
       // Could not send or invalid data
-      log::add(__CLASS__, 'debug', __('Impossible de communiquer avec le serveur de statistiques (Réponse : false)', __FILE__));
+      log::add(__CLASS__, 'debug', "Unable to communicate with the statistics server (Response: false)");
       return;
     }
     $response = @json_decode($result, true);
     if (!isset($response['status']) || $response['status'] != 'success') {
       // Could not send or invalid data
-      log::add(__CLASS__, 'debug', sprintf(__('Impossible de communiquer avec le serveur de statistiques (Réponse : %s)', __FILE__), $result));
+      log::add(__CLASS__, 'debug', 'Unable to communicate with the statistics server (Response: ' . $result .')');
     } else {
       config::save('installUUID', $data['UUID'], __CLASS__);
-      if ($data['removeMe']) {
+      if ($data['next'] == 0) {
         log::add(__CLASS__, 'info', __('Données statistiques supprimées', __FILE__));
         cache::set('brother::nextStats', PHP_INT_MAX);
       } else {
-        log::add(__CLASS__, 'debug', sprintf(__('Données statistiques envoyées (Réponse : %s)', __FILE__), $result));
+        log::add(__CLASS__, 'debug', 'Statistical data sent (Response: ' . $result .')');
         // Set last sent datetime
         cache::set('brother::nextStats', $data['next']);
       }
