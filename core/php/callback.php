@@ -23,6 +23,6 @@ if (!is_object($eqLogic)) {
 }
 
 $received = file_get_contents("php://input"); // Get page full content
-log::add('brother', 'debug', sprintf(__("Données reçues en callback '%s'", __FILE__), $received));
+log::add('brother', 'debug', sprintf(__("Données reçues par callback '%s'", __FILE__), $received));
 
 $eqLogic->recordData($received);
