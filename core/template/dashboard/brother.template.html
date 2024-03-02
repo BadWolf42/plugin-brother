@@ -161,6 +161,7 @@
            contentUrl: 'index.php?v=d&modal=cmd.history&id=' + event.target.getAttribute('cmd-id')
            });
         } else {
+          // TODO: Remove jQuery $('#md_modal') backward compatibility when Core 4.3 deprecated
           $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id='+event.target.getAttribute('cmd-id')).dialog('open');
         }
       }
