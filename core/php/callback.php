@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
+require_once __DIR__ . "/../../../../core/php/core.inc.php";
 
 if (!jeedom::apiAccess(init('apikey'), 'brother')) { // Security
 	echo 'Unauthorized access.';

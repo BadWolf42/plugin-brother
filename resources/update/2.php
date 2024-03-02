@@ -23,7 +23,7 @@ foreach (eqLogic::byType('brother') as $eqLogic) {
 		$eqLogic->setConfiguration('brotherColorType', 1);
 }
 
-$cmd = 'sudo rm -f ' . realpath(__FILE__ . '/../data/output.json');
+$cmd = 'sudo rm -f ' . realpath(__DIR__ . '/../data/output.json');
 exec($cmd);
 
 ?>
