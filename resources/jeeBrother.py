@@ -1,11 +1,55 @@
 from asyncio import run
 from datetime import datetime
 from brother import Brother, SnmpError, UnsupportedModel
-from json import dumps, JSONEncoder
+from json import dumps, load, JSONEncoder
 import logging
-from os import getenv
+from logging.config import dictConfig
+from os import getenv, getpid
+from os.path import dirname, realpath
+from platform import python_version, system, version
 from requests import post
 from sys import argv
+
+
+logger = logging.getLogger('jeebrother')
+
+
+logconfig: dict = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'withFunction': {
+            'format': '[%(asctime)s][%(levelname)s] : #' + \
+                (argv[1] if len(argv) > 3 else '[???]') + \
+                '# in %(name)s.%(funcName)s() %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'normal': {
+            'format': '[%(asctime)s][%(levelname)s] : #' + \
+                (argv[1] if len(argv) > 3 else '[???]') + '# %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'fileHandler': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            # 'level': 'DEBUG',
+            # 'formatter': 'withFunction',
+            'formatter': 'normal',
+            'filename': getenv('LOGFILE', '/tmp/brotherd.log'),
+        },
+    },
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['fileHandler'],
+    },
+    # 'loggers': {
+    #     'urllib3': {
+    #         'level': 'WARNING',
+    #     },
+    # },
+}
+
 
 class DateTimeEncoder(JSONEncoder):
     def default(self, o):
@@ -13,47 +57,83 @@ class DateTimeEncoder(JSONEncoder):
             return o.isoformat()
         return JSONEncoder.default(self, o)
 
+
 async def main():
+    # Load logging configuration
+    dictConfig(logconfig)
+
+    # Get loglevel from ENV
     newlevel = {
         'debug': logging.DEBUG,
         'info': logging.INFO,
         'warning': logging.WARNING,
-        'error': logging.ERROR
-    }.get(getenv("LOGLEVEL", "error"), logging.ERROR)
-    logging.basicConfig(level = newlevel)
+        'error': logging.ERROR,
+        'critical': logging.CRITICAL,
+        'none': logging.CRITICAL,
+        'notset': logging.NOTSET,
+        'emergency': logging.CRITICAL,
+    }.get(getenv('LOGLEVEL', 'error'), logging.ERROR)
+    logging.getLogger().setLevel(newlevel)
 
-    logging.debug('VARS:')
-    logging.debug('  host:         %s', argv[1])
-    logging.debug('  printer_type: %s', argv[2])
-    logging.debug('  LOGLEVEL:     %s', getenv("LOGLEVEL", "error"))
-    logging.debug('  CALLBACK:     %s', getenv("CALLBACK", None))
+    # Welcome message
+    with open(
+        dirname(realpath(__file__)) + '/../plugin_info/info.json'
+    ) as json_file:
+        logger.debug(
+            '❤ Thanks for using Brother v%s with Python v%s on %s %s ❤',
+            load(json_file)['pluginVersion'],
+            python_version(),
+            system(),
+            version()
+        )
 
-    if len(argv) <= 2:
-        logging.error('usage: %s <host> <ink/laser>', argv[0])
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug('┌─► Loggers ◄────────────────────────────')
+        for name, level in {
+            name: logging.getLevelName(logging.getLogger(name).getEffectiveLevel())
+            for name in [''] + sorted(logging.root.manager.loggerDict)
+        }.items():
+            logger.debug('│ %-30s%s', name, level)
+        logger.debug('└────────────────────────────────────────')
+
+    # Display daemon informations
+    logger.debug('┌─► Daemon ◄─────────────────────────────')
+    logger.debug('│ PID         : %s', getpid())
+    logger.debug('│ Equipment   : %s', argv[1] if len(argv) > 3 else "")
+    logger.debug('│ Host        : %s', argv[2] if len(argv) > 3 else "")
+    logger.debug('│ Printer type: %s', argv[3] if len(argv) > 3 else "")
+    logger.debug('│ Log file    : %s', getenv('LOGFILE', '/tmp/brotherd.log'))
+    logger.debug('│ Log level   : %s', getenv("LOGLEVEL", "error"))
+    logger.debug('│ Callback url: %s', getenv("CALLBACK", None))
+    logger.debug('└────────────────────────────────────────')
+
+    if len(argv) <= 3:
+        logger.error('usage: %s <eqName> <host> <ink/laser>', argv[0])
         exit(1)
 
     callback = getenv("CALLBACK", None) # with APIKEY included
     if callback is None:
-        logging.error('Missing callback url (use ENV var CALLBACK="<url>")')
+        logger.error('Missing callback url (use ENV var CALLBACK="<url>")')
         exit(2)
 
     try:
-        brother = Brother(argv[1], kind=argv[2])
+        brother = Brother(argv[2], kind=argv[3])
         data = await brother.async_update()
     except (ConnectionError, SnmpError) as e:
-        logging.debug(f'{e}')
+        logger.debug(f'{e}')
         data = {'unreachable': True}
     except UnsupportedModel as e:
-        logging.error(f'{e}')
+        logger.error(f'{e}')
         data = {'unreachable': True}
 
     r = post(callback, dumps(data, cls=DateTimeEncoder))
+
 
 if __name__ == '__main__':
     # Run main task
     try:
         run(main())
     except KeyboardInterrupt:
-        logging.info('Exiting')
+        logger.info('Exiting')
     except Exception:
-        logging.exception('Exception in main:')
+        logger.exception('Exception in main:')

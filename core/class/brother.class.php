@@ -1,19 +1,4 @@
 <?php
-/* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../../../core/php/core.inc.php';
@@ -348,49 +333,50 @@ class brother extends eqLogic {
     if (!$this->getIsEnable())
       return;
 
-    $cmd  = 'LOGLEVEL=' . log::convertLogLevel(log::getLogLevel(__CLASS__)) . ' ';
+    $cmd  = 'LOGFILE=' . realpath(log::getPathToLog(__CLASS__));
+    $cmd  .= ' LOGLEVEL=' . log::convertLogLevel(log::getLogLevel(__CLASS__));
     $port = config::byKey('internalPort', 'core', 80);
     $comp = trim(config::byKey('internalComplement', 'core', ''), '/');
     if ($comp !== '') $comp .= '/';
-    $cmd .= "CALLBACK='http://localhost:".$port."/".$comp."plugins/brother/core/php/callback.php";
+    $cmd .= " CALLBACK='http://localhost:".$port."/".$comp."plugins/brother/core/php/callback.php";
     $cmd .= "?apikey=".jeedom::getApiKey(__CLASS__)."&eqId=".$this->getId()."' ";
     $cmd .= realpath(__DIR__ . '/../../resources/venv/bin') . '/python3 ';
     $cmd .= realpath(__DIR__ . '/../../resources') . '/jeeBrother.py ';
+    $cmd .= "'" . $this->getHumanName() . "' ";
     $cmd .= $this->getConfiguration('brotherAddress') . ' ';
-    $cmd .= $this->getConfiguration('brotherType') . ' ';
-    $cmd .= ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1 &';
-    log::add(__CLASS__, 'info', 'Lancement script Brother : ' . $cmd);
+    $cmd .= $this->getConfiguration('brotherType') . ' >/dev/null &';
+    log::add(__CLASS__, 'debug',  '#' . $this->getHumanName() . '# Running script: ' . $cmd);
     exec($cmd);
     $this->checkAndUpdateCmd('status', __('Actualisation', __FILE__));
   }
 
   public function recordData($output) {
     if (!$this->getIsEnable()) {
-      log::add(__CLASS__, 'debug', $this->getHumanName() . ' is disabled trashing received data... ');
+      log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# is disabled trashing received data... ');
       return;
     }
 
     if ($output === false || strlen($output) == 0) {
-      log::add(__CLASS__, 'info', $this->getHumanName() . ' no data received');
+      log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# no data received');
       $output = '{"unreachable": true}';
     } else {
-      log::add(__CLASS__, 'debug', $this->getHumanName() . ' data content: ' . $output);
+      log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# data content: ' . $output);
     }
 
     $data = json_decode($output, true);
     if ($data === null) {
-      log::add(__CLASS__, 'error', $this->getHumanName() . ' JSON decode impossible');
+      log::add(__CLASS__, 'error', '#' . $this->getHumanName() . '# JSON decode impossible');
       return;
     }
     if (isset($data['msg'])) {
-      log::add(__CLASS__, 'error', $this->getHumanName() . ' error while executing Python script: ' . $data['message']);
+      log::add(__CLASS__, 'error', '#' . $this->getHumanName() . '# error while executing Python script: ' . $data['message']);
       return;
     }
 
     // Check if device is unreachable
     if (isset($data['unreachable'])) {
       $this->checkAndUpdateCmd('status', __('Injoignable', __FILE__));
-      log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for status: ' . __('Injoignable', __FILE__));
+      log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for status: ' . __('Injoignable', __FILE__));
       return;
     }
     // List keys to fetch in $data
@@ -409,9 +395,9 @@ class brother extends eqLogic {
     foreach ($infos as $logicalId => $key) {
       if (isset($data[$key]) && !is_null($data[$key])) {
         $this->checkAndUpdateCmd($logicalId, $data[$key]);
-        log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for ' . $logicalId . ': ' . $data[$key]);
+        log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for ' . $logicalId . ': ' . $data[$key]);
       } else {
-        log::add(__CLASS__, 'debug', $this->getHumanName() . ' null value for ' . $key);
+        log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# null value for ' . $key);
       }
     }
 
@@ -422,9 +408,9 @@ class brother extends eqLogic {
       if (is_null($cmdLastPrints) || !is_null($cmdLastPrints->execCmd()))
         $lastPrintsValue = $data['page_counter'] - $lastCounterVal;
       $this->checkAndUpdateCmd('lastprints', $lastPrintsValue);
-      log::add(__CLASS__, 'info', $this->getHumanName() . ' record value for last prints: ' . $lastPrintsValue);
+      log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for last prints: ' . $lastPrintsValue);
     } else {
-      log::add(__CLASS__, 'debug', $this->getHumanName() . ' null value for page_counter and/or last counter');
+      log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# null value for page_counter and/or last counter');
     }
   }
 
@@ -484,8 +470,8 @@ class brotherCmd extends cmd {
     /** @var brother $eqLogic */
     $eqLogic = $this->getEqLogic();
     if (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)
-      throw new Exception(sprintf(__("Equipement desactivé impossible d'éxecuter la commande : %s", __FILE__), $this->getHumanName()));
-    log::add(brother::class, 'debug', 'Execution de la commande ' . $this->getLogicalId());
+      throw new Exception(sprintf(__("Equipement desactivé impossible d'éxecuter la commande : #%s#", __FILE__), $this->getHumanName()));
+    log::add(brother::class, 'debug', '#' . $this->getHumanName() . '# Command executed');
     switch ($this->getLogicalId()) {
       case "refresh":
         $eqLogic->refreshInfo();
