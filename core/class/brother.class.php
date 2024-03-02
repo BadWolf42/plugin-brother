@@ -485,7 +485,7 @@ class brotherCmd extends cmd {
     $eqLogic = $this->getEqLogic();
     if (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)
       throw new Exception(sprintf(__("Equipement desactivé impossible d'éxecuter la commande : %s", __FILE__), $this->getHumanName()));
-    log::add(__CLASS__, 'debug', 'Execution de la commande ' . $this->getLogicalId());
+    log::add(brother::class, 'debug', 'Execution de la commande ' . $this->getLogicalId());
     switch ($this->getLogicalId()) {
       case "refresh":
         $eqLogic->refreshInfo();
