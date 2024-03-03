@@ -96,8 +96,8 @@ async def main():
             logger.debug('│ %-30s%s', name, level)
         logger.debug('└────────────────────────────────────────')
 
-    # Display daemon informations
-    logger.debug('┌─► Daemon ◄─────────────────────────────')
+    # Display informations
+    logger.debug('┌─► Script ◄─────────────────────────────')
     logger.debug('│ PID         : %s', getpid())
     logger.debug('│ Equipment   : %s', argv[1] if len(argv) > 3 else "")
     logger.debug('│ Host        : %s', argv[2] if len(argv) > 3 else "")
