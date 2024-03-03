@@ -1,2 +1,2 @@
-brother==2.1.1 # Need Python 3.9
+brother==4.0.0 # Need Python 3.11
 requests==2.31.0

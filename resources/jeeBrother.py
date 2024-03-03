@@ -1,6 +1,6 @@
 from asyncio import run
 from datetime import datetime
-from brother import Brother, SnmpError, UnsupportedModel
+from brother import Brother, BrotherSensors, SnmpError, UnsupportedModel
 from json import dumps, load, JSONEncoder
 import logging
 from logging.config import dictConfig
@@ -55,6 +55,8 @@ class DateTimeEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime):
             return o.isoformat()
+        if isinstance(o, BrotherSensors):
+            return dict(o)
         return JSONEncoder.default(self, o)
 
 
@@ -118,7 +120,9 @@ async def main():
 
     try:
         brother = Brother(argv[2], kind=argv[3])
+        # brother = await Brother.create(host=argv[2], printer_type=argv[3])
         data = await brother.async_update()
+        # brother.shutdown()
     except (ConnectionError, SnmpError) as e:
         logger.debug(f'{e}')
         data = {'unreachable': True}
