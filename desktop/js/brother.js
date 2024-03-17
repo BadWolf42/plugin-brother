@@ -59,12 +59,14 @@ function addCmdToTable(_cmd) {
   tr += '</tr>';
 
   document.querySelector('#table_cmd tbody').insertAdjacentHTML('beforeend', tr);
-  let last = document.querySelectorAll('#table_cmd tbody tr').last();
-  last.setJeeValues(_cmd, '.cmdAttr')
+  let last = document.querySelector('#table_cmd tbody tr:last-child');
+  // last.setJeeValues(_cmd, '.cmdAttr')
+  $(last).setValues(_cmd, '.cmdAttr');
 
   if (isset(_cmd.type)) {
     last.querySelector('.cmdAttr[data-l1key="type"]').value = init(_cmd.type);
   }
 
-  jeedom.cmd.changeType(last, init(_cmd.subType));
+  // jeedom.cmd.changeType(last, init(_cmd.subType));
+  jeedom.cmd.changeType($(last), init(_cmd.subType));
 }
