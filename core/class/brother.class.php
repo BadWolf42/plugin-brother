@@ -332,7 +332,10 @@ class brother extends eqLogic {
   public function refreshInfo() {
     if (!$this->getIsEnable())
       return;
-
+      // Refresh only if dependancies are ok
+    $deps_info = plugin::byId(__CLASS__)->dependancy_info();
+    if ($deps_info['state'] !== 'ok')
+      return;
     $cmd  = 'LOGFILE=' . realpath(log::getPathToLog(__CLASS__));
     $cmd  .= ' LOGLEVEL=' . log::convertLogLevel(log::getLogLevel(__CLASS__));
     $port = config::byKey('internalPort', 'core', 80);
