@@ -104,29 +104,29 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                 <div class="col-sm-6">
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherAddress" placeholder="Adresse IP / Nom d'hôte"/>
                 </div>
-                <div class="form-group">
-                  <label class="col-sm-6 control-label help">{{Technologie de l'imprimante}}</label>
-                  <div class="col-sm-6">
-                    <select id="sel_object_template" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherType">
-                      <option value="ink">{{Jet d'encre}}</option>
-                      <option value="laser">{{Laser}}</option>
-                    </select>
-                  </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6 control-label help">{{Technologie de l'imprimante}}</label>
+                <div class="col-sm-6">
+                  <select id="sel_object_template" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherType">
+                    <option value="ink">{{Jet d'encre}}</option>
+                    <option value="laser">{{Laser}}</option>
+                  </select>
                 </div>
-                <div class="form-group">
-                  <label class="col-sm-6 control-label help">{{Type de l'imprimante}}</label>
-                  <div class="col-sm-6">
-                    <select id="sel_object_template" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherColorType">
-                      <option value="1">{{Couleur}}</option>
-                      <option value="0">{{Noir & Blanc}}</option>
-                    </select>
-                  </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6 control-label help">{{Type de l'imprimante}}</label>
+                <div class="col-sm-6">
+                  <select id="sel_object_template" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherColorType">
+                    <option value="1">{{Couleur}}</option>
+                    <option value="0">{{Noir & Blanc}}</option>
+                  </select>
                 </div>
-                <div class="form-group">
-                  <label class="col-sm-6 control-label help" data-help="{{Cocher la case pour utiliser le template de widget}}">{{Template de widget}}</label>
-                  <div class="col-sm-6">
-                    <input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherWidget"/>
-                  </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-6 control-label help" data-help="{{Cocher la case pour utiliser le template de widget}}">{{Template de widget}}</label>
+                <div class="col-sm-6">
+                  <input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherWidget"/>
                 </div>
               </div>
             </fieldset>
