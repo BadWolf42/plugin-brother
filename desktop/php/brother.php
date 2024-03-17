@@ -105,6 +105,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherAddress" placeholder="Adresse IP / Nom d'hôte"/>
                 </div>
               </div>
+
               <div class="form-group">
                 <label class="col-sm-6 control-label help">{{Technologie de l'imprimante}}</label>
                 <div class="col-sm-6">
@@ -114,6 +115,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                   </select>
                 </div>
               </div>
+
               <div class="form-group">
                 <label class="col-sm-6 control-label help">{{Type de l'imprimante}}</label>
                 <div class="col-sm-6">
@@ -123,12 +125,14 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                   </select>
                 </div>
               </div>
+
               <div class="form-group">
                 <label class="col-sm-6 control-label help" data-help="{{Cocher la case pour utiliser le template de widget}}">{{Template de widget}}</label>
                 <div class="col-sm-6">
                   <input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="brotherWidget"/>
                 </div>
               </div>
+
             </fieldset>
           </form>
         </div>
