@@ -1,6 +1,6 @@
-from asyncio import run
+from asyncio import new_event_loop
 from datetime import datetime
-from brother import Brother, SnmpError, UnsupportedModel
+from brother import Brother, BrotherSensors, SnmpError, UnsupportedModel
 from json import dumps, load, JSONEncoder
 import logging
 from logging.config import dictConfig
@@ -55,10 +55,12 @@ class DateTimeEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime):
             return o.isoformat()
+        if isinstance(o, BrotherSensors):
+            return dict(o)
         return JSONEncoder.default(self, o)
 
 
-async def main():
+async def setup():
     # Load logging configuration
     dictConfig(logconfig)
 
@@ -107,6 +109,10 @@ async def main():
     logger.debug('│ Callback url: %s', getenv("CALLBACK", None))
     logger.debug('└────────────────────────────────────────')
 
+
+async def main():
+    await setup()
+
     if len(argv) <= 3:
         logger.error('usage: %s <eqName> <host> <ink/laser>', argv[0])
         exit(1)
@@ -117,7 +123,7 @@ async def main():
         exit(2)
 
     try:
-        brother = Brother(argv[2], kind=argv[3])
+        brother = await Brother.create(argv[2], printer_type=argv[3])
         data = await brother.async_update()
     except (ConnectionError, SnmpError) as e:
         logger.debug(f'{e}')
@@ -126,13 +132,16 @@ async def main():
         logger.error(f'{e}')
         data = {'unreachable': True}
 
+    brother.shutdown()
     r = post(callback, dumps(data, cls=DateTimeEncoder))
 
 
 if __name__ == '__main__':
     # Run main task
     try:
-        run(main())
+        loop = new_event_loop()
+        loop.run_until_complete(main())
+        loop.close()
     except KeyboardInterrupt:
         logger.info('Exiting')
     except Exception:

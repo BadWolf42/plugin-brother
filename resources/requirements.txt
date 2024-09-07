@@ -1,3 +1,2 @@
-brother==1.0.2
-pyasn1==0.4.8
+brother==4.3.0
 requests==2.32.3
