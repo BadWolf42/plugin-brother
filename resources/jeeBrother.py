@@ -137,7 +137,7 @@ async def main():
     try:
         brother = await Brother.create(argv[2], printer_type=argv[3])
         data = await brother.async_update()
-    except (ConnectionError, SnmpError) as e:
+    except (ConnectionError, TimeoutError, SnmpError) as e:
         logger.debug(f'{e}')
         data = {'unreachable': True}
     except UnsupportedModelError as e:
