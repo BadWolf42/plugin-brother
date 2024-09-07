@@ -1,6 +1,6 @@
 from asyncio import new_event_loop
 from datetime import datetime
-from brother import Brother, BrotherSensors, SnmpError, UnsupportedModel
+from brother import Brother, BrotherSensors, SnmpError, UnsupportedModelError
 from json import dumps, load, JSONEncoder
 import logging
 from logging.config import dictConfig
@@ -128,7 +128,7 @@ async def main():
     except (ConnectionError, SnmpError) as e:
         logger.debug(f'{e}')
         data = {'unreachable': True}
-    except UnsupportedModel as e:
+    except UnsupportedModelError as e:
         logger.error(f'{e}')
         data = {'unreachable': True}
 
