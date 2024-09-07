@@ -142,6 +142,7 @@ async def main():
     try:
         brother = await Brother.create(argv[2], printer_type=argv[3])
         data = await brother.async_update()
+        brother.shutdown()
     except (ConnectionError, TimeoutError, SnmpError) as e:
         logger.debug(f'{e}')
         data = {'unreachable': True}
@@ -149,7 +150,6 @@ async def main():
         logger.error(f'{e}')
         data = {'unreachable': True}
 
-    brother.shutdown()
     r = post(callback, dumps(data, cls=DateTimeEncoder))
 
 
