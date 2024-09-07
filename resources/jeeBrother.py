@@ -43,6 +43,18 @@ logconfig: dict = {
         'level': 'WARNING',
         'handlers': ['fileHandler'],
     },
+    # TODO: Fix this dirty workaround
+    #  Task was destroyed but it is pending!
+    #    task: <Task pending name='Task-3' coro=<AsyncioDispatcher.handle_timeout() running at /var/www/html/plugins/brother/resources/venv/lib/python3.11/site-packages/pysnmp/carrier/asyncio/dispatch.py:62> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+    #  Related to:
+    #  And: https://github.com/lextudio/pysnmp/issues/58
+
+    'loggers': {
+        'asyncio': {
+            'level': 'CRITICAL',
+        },
+    },
+    # END OF TODO
     # 'loggers': {
     #     'urllib3': {
     #         'level': 'WARNING',
