@@ -177,7 +177,7 @@ class brother extends eqLogic {
     );
 
     return array(
-      'script' => __DIR__ . '/../../resources/install_#stype#.sh dependancy',
+      'script' => __DIR__ . '/../../resources/install_#stype#.sh',
       'log' => $depLogFullPath
     );
   }
