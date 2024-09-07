@@ -157,7 +157,6 @@ class brother extends eqLogic {
   public static function dependancy_install() {
     $depLogFile = __CLASS__ . '_dep';
     $depLogFullPath = log::getPathToLog($depLogFile);
-    $depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
     log::add(__CLASS__, 'info', sprintf(
       __('Installation des dépendances, voir log dédié (%s)', __FILE__),
       $depLogFile
@@ -178,7 +177,7 @@ class brother extends eqLogic {
     );
 
     return array(
-      'script' => __DIR__ . '/../../resources/install_#stype#.sh ' . $depProgressFile,
+      'script' => __DIR__ . '/../../resources/install_#stype#.sh dependancy',
       'log' => $depLogFullPath
     );
   }
