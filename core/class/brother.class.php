@@ -93,36 +93,61 @@ class brother extends eqLogic {
   }
 
   /**
+   * Avoid backing-up "resources/venv" folder
+   */
+  public static function backupExclude() {
+    return ['resources/venv'];
+  }
+
+  /**
+   * Provides Python dependancy information
+   */
+  private static function pythonRequirementsInstalled(string $pythonPath, string $requirementsPath) {
+    if (!file_exists($pythonPath) || !file_exists($requirementsPath)) {
+      return false;
+    }
+    exec("{$pythonPath} -m pip freeze", $packages_installed);
+    $packages = join("||", $packages_installed);
+    exec("cat {$requirementsPath}", $packages_needed);
+    foreach ($packages_needed as $line) {
+      if (preg_match('/([^\s]+)[\s]*([>=~]=)[\s]*([\d+\.?]+)$/', $line, $need) === 1) {
+        if (preg_match('/' . $need[1] . '==([\d+\.?]+)/', $packages, $install) === 1) {
+          if ($need[2] == '==' && $need[3] != $install[1]) {
+            return false;
+          } elseif (version_compare($need[3], $install[1], '>')) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
    * Provides dependancy information
    */
   public static function dependancy_info() {
-    $depLogFile = __CLASS__ . '_dep';
-    $depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
-
+    $pythonBin = __DIR__ . '/../../resources/venv/bin/python3';
+    $pythonReq = __DIR__ . '/../../resources/requirements.txt';
     $return = array();
-    $return['log'] = log::getPathToLog($depLogFile);
-    $return['progress_file'] = $depProgressFile;
+    $return['log'] = log::getPathToLog(__CLASS__ . '_dep');
+    $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
     $return['state'] = 'ok';
-
-    if (file_exists($depProgressFile)) {
-      log::add(__CLASS__, 'debug', sprintf(__("Dépendances en cours d'installation... (%s%%)", __FILE__), trim(file_get_contents($depProgressFile))));
+    if (file_exists($return['progress_file'])) {
+      $return['state'] = 'in_progress';
+      log::add(__CLASS__, 'debug', sprintf(
+        __("Dépendances en cours d'installation... (%s%%)", __FILE__),
+        trim(file_get_contents($return['progress_file']))
+      ));
+    } elseif (!file_exists($pythonBin)) {
       $return['state'] = 'nok';
-      return $return;
-    }
-
-    if (!file_exists(__DIR__ . '/../../resources/venv/bin/pip3') || !file_exists(__DIR__ . '/../../resources/venv/bin/python3')) {
-      log::add(__CLASS__, 'debug', __("Relancez les dépendances, le venv Python n'a pas encore été créé", __FILE__));
+    } elseif (!self::pythonRequirementsInstalled($pythonBin, $pythonReq)) {
       $return['state'] = 'nok';
     } else {
-      exec(__DIR__ . '/../../resources/venv/bin/pip3 freeze --no-cache-dir -r '.__DIR__ . '/../../resources/requirements.txt 2>&1 >/dev/null', $output);
-      if (count($output) > 0) {
-        log::add(__CLASS__, 'error', __('Relancez les dépendances, au moins une bibliothèque Python requise est manquante dans le venv :', __FILE__).' <br/>'.implode('<br/>', $output));
-        $return['state'] = 'nok';
-      }
-    }
-
-    if ($return['state'] == 'ok')
       log::add(__CLASS__, 'debug', sprintf(__('Dépendances installées.', __FILE__)));
+    }
     return $return;
   }
 
@@ -131,25 +156,30 @@ class brother extends eqLogic {
    */
   public static function dependancy_install() {
     $depLogFile = __CLASS__ . '_dep';
+    $depLogFullPath = log::getPathToLog($depLogFile);
     $depProgressFile = jeedom::getTmpFolder(__CLASS__) . '/dependancy';
-
-    log::add(__CLASS__, 'info', sprintf(__('Installation des dépendances, voir log dédié (%s)', __FILE__), $depLogFile));
-
+    log::add(__CLASS__, 'info', sprintf(
+      __('Installation des dépendances, voir log dédié (%s)', __FILE__),
+      $depLogFile
+    ));
     $update = update::byLogicalId(__CLASS__);
+    $version = $update->getLocalVersion();
+    $branch = $update->getConfiguration()['version'];
+    $pythonBin = __DIR__ . '/../../resources/venv/bin/python3';
     shell_exec(
       'echo "\n\n================================================================================\n'.
       '== Jeedom '.jeedom::version().' '.jeedom::getHardwareName().
       ' in $(lsb_release -d -s | xargs echo -n) on $(arch | xargs echo -n)/'.
-      '$(dpkg --print-architecture | xargs echo -n)/$(getconf LONG_BIT | xargs echo -n)bits\n'.
-      '== $(python3 -VV | xargs echo -n)\n'.
+      '$(dpkg --print-architecture | xargs echo -n)/'.
+      '$(getconf LONG_BIT | xargs echo -n)bits\n'.
+      '== $('.$pythonBin.' -VV | xargs echo -n)\n'.
       '== '.__CLASS__.' v'.config::byKey('version', __CLASS__, 'unknown', true).
-      ' ('.$update->getLocalVersion().') branch:'.$update->getConfiguration()['version'].
-      '" >> '.log::getPathToLog($depLogFile)
+      ' ('.$version.') branch:'.$branch.'" >> '.$depLogFullPath
     );
 
     return array(
       'script' => __DIR__ . '/../../resources/install_#stype#.sh ' . $depProgressFile,
-      'log' => log::getPathToLog($depLogFile)
+      'log' => $depLogFullPath
     );
   }
 
