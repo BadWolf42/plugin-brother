@@ -411,6 +411,7 @@ class brother extends eqLogic {
       log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for status: ' . __('Injoignable', __FILE__));
       return;
     }
+    $data['status'] = ucfirst($data['status']);
     // List keys to fetch in $data
     $pType = ($this->getConfiguration('brotherType') == 'laser') ? 'toner' : 'ink';
     $infos = ['model' => 'model', 'serial' => 'serial', 'firmware' => 'firmware', 'status' => 'status'];
