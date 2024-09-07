@@ -1,5 +1,6 @@
 from asyncio import new_event_loop
 from datetime import datetime
+from dataclasses import asdict
 from brother import Brother, BrotherSensors, SnmpError, UnsupportedModelError
 from json import dumps, load, JSONEncoder
 import logging
@@ -68,7 +69,11 @@ class DateTimeEncoder(JSONEncoder):
         if isinstance(o, datetime):
             return o.isoformat()
         if isinstance(o, BrotherSensors):
-            return dict(o)
+            res: dict = {}
+            for k, v in asdict(o).items():
+                if v is not None:
+                    res[k] = v
+            return res
         return JSONEncoder.default(self, o)
 
 
