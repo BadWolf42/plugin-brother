@@ -365,7 +365,7 @@ class brother extends eqLogic {
     $deps_info = plugin::byId(__CLASS__)->dependancy_info();
     if ($deps_info['state'] !== 'ok')
       return;
-    $cmd  = 'LOGFILE=' . realpath(log::getPathToLog(__CLASS__));
+    $cmd  = 'LOGFILE=' . log::getPathToLog(__CLASS__);
     $cmd  .= ' LOGLEVEL=' . log::convertLogLevel(log::getLogLevel(__CLASS__));
     $port = config::byKey('internalPort', 'core', 80);
     $comp = trim(config::byKey('internalComplement', 'core', ''), '/');

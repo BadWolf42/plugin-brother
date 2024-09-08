@@ -7,6 +7,6 @@ exec('sudo rm -f ' . realpath(__DIR__ . '/../data'));
 exec('sudo rm -f ' . realpath(__DIR__ . '/../../plugin_info/packages.json'));
 
 // Remove brotherCmd log
-exec('sudo rm -f ' . realpath(log::getPathToLog('brotherCmd')));
+exec('sudo rm -f ' . log::getPathToLog('brotherCmd'));
 
 ?>
