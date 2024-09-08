@@ -1,49 +1,86 @@
 {
-    "plugins\/brother\/plugin_info\/configuration.php": {
-        "401 - Accès non autorisé": "401 - Unauthorized access"
+    "plugins\/brother\/core\/class\/brother.class.php": {
+        "Actualisation": "Update",
+        "Cyan": "Cyan",
+        "Dernières impressions": "Latest impressions",
+        "Données statistiques supprimées": "Statistical data deleted",
+        "Dépendances en cours d'installation... (%s%%)": "Dependencies being installed... (%s%%)",
+        "Dépendances installées.": "Dependencies installed.",
+        "Equipement desactivé impossible d'éxecuter la commande : #%s#": "Equipment disabled unable to execute command: #%s#",
+        "Firmware": "Firmware",
+        "Injoignable": "Unreachable",
+        "Installation des dépendances, voir log dédié (%s)": "Installation of dependencies, see dedicated log (%s)",
+        "Jaune": "Yellow",
+        "Magenta": "Magenta",
+        "Modèle": "Model",
+        "Noir": "Black",
+        "Nombre de pages": "Number of pages",
+        "Numéro de série": "Serial number",
+        "Rafraichir": "Refresh",
+        "Statut": "Status"
+    },
+    "plugins\/brother\/core\/php\/callback.php": {
+        "Accès non autorisé depuis %1\\$s, avec une clé API commençant par %2\\$.8s...": "Unauthorized access from %1\\$s, with an API key starting with %2\\$.8s...",
+        "Accès non autorisé depuis %s (pas de clé API)": "Unauthorized access from %s (no API key)",
+        "Données reçues par callback '%s'": "Data received by callback '%s",
+        "L'équipement %s n'existe pas\/plus (ou n'est pas associé au plugin brother)": "The %s device does not\/no longer exist (or is not associated with the brother plugin)"
+    },
+    "plugins\/brother\/desktop\/js\/brother.config.js": {
+        "Avis": "Reviews"
+    },
+    "plugins\/brother\/desktop\/js\/brother.js": {
+        "Afficher": "Show",
+        "Choisir une icône": "Choose an icon",
+        "Historiser": "Historize",
+        "Logical ID": "Logical ID",
+        "Max": "Max",
+        "Min": "Min",
+        "Nom de la commande": "Command name",
+        "Tester": "Test",
+        "Unité": "Unit"
     },
     "plugins\/brother\/desktop\/php\/brother.php": {
         "401 - Accès non autorisé": "401 - Unauthorized access",
-        "Gestion": "Management",
+        "Actions": "Actions",
+        "Activer": "Activate",
+        "Adresse IP \/ Nom d'hôte": "IP address \/ Hostname",
         "Ajouter": "Add",
-        "Configuration": "Configuration",
-        "Mes Imprimantes": "My Printers",
-        "Rechercher": "Search",
-        "Configuration avancée": "Advanced configuration",
-        "Dupliquer": "Duplicate",
-        "Sauvegarder": "Save",
-        "Supprimer": "Delete",
-        "Equipement": "Equipment",
-        "Commandes": "Commands",
-        "Nom de l'imprimante": "Name of the printer",
-        "Objet parent": "Parent object",
         "Aucun": "None",
         "Catégorie": "Category",
-        "Options": "Options",
-        "Activer": "Activate",
-        "Visible": "Visible",
-        "Adresse IP / Nom d'hôte": "IP address / Hostname",
-        "Type de l'imprimante": "Printer's type",
-        "Technologie de l'imprimante" : "Printer's technology",
+        "Cocher la case pour utiliser le template de widget": "Check the box to use the widget template",
+        "Commandes": "Commands",
+        "Configuration": "Configuration",
+        "Configuration avancée": "Advanced configuration",
         "Couleur": "Color",
-        "Noir & Blanc": "Black & White",
+        "Dupliquer": "Duplicate",
+        "Equipement": "Equipment",
+        "Etat": "State",
+        "Gestion": "Management",
         "Jet d'encre": "Inkjet",
         "Laser": "Laser",
-        "Template de widget": "Widget template",
-        "Id": "ID",
+        "Logical ID": "Logical ID",
+        "Mes Imprimantes": "My Printers",
+        "Noir & Blanc": "Black & White",
         "Nom": "Name",
+        "Nom de l'imprimante": "Name of the printer",
+        "Objet parent": "Parent object",
+        "Options": "Options",
+        "Rechercher": "Search",
+        "Sauvegarder": "Save",
+        "Supprimer": "Delete",
+        "Technologie de l'imprimante": "Printer's technology",
+        "Template de widget": "Widget template",
         "Type": "Type",
-        "Action": "Action"
+        "Type de l'imprimante": "Printer's type",
+        "Visible": "Visible"
     },
-    "plugins\/brother\/desktop\/js\/brother.js": {
-        "Min": "Min",
-        "Max": "Max",
-        "Unité": "Unit",
-        "Afficher": "Show",
-        "Historiser": "Historize",
-        "Tester": "Test"
+    "plugins\/brother\/plugin_info\/configuration.php": {
+        "401 - Accès non autorisé": "401 - Unauthorized access"
     },
-    "plugins\/brother\/core\/class\/brother.class.php": {
-
+    "plugins\/brother\/plugin_info\/install.php": {
+        "Impossible de récupérer le numéro de version dans le fichier info.json, ceci ce devrait pas arriver !": "Unable to retrieve version number from info.json file, this should not happen!",
+        "Version %1\\$d : Exception lors de l'application des modifications : %2\\$s": "Version %1\\$d: Exception when applying changes: %2\\$s",
+        "Version %d : Application des modifications": "Version %d: Application of changes",
+        "Version %d : Modifications appliquées": "Version %d: Changes applied"
     }
 }
