@@ -122,7 +122,11 @@
     // Update Black on graph on value change
     if ('#black_id#' != '') {
       jeedom.cmd.addUpdateFunction('#black_id#', function(_options) {
-        document.querySelector('#gauge-container-#id# path.blackQte')?.setAttribute('d', drow_arc(47, _options.value));
+        var _target = document.querySelector('#gauge-container-#id# path.blackQte')
+        if (_target) {
+          _target.setAttribute('d', drow_arc(47, _options.value));
+          _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+        }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#black_id#', value: '#black_value#'}]);
     }
@@ -130,7 +134,11 @@
     // Update Cyan on graph on value change
     if ('#cyan_id#' != '') {
       jeedom.cmd.addUpdateFunction('#cyan_id#', function(_options) {
-        document.querySelector('#gauge-container-#id# path.cyanQte')?.setAttribute('d', drow_arc(38, _options.value));
+        var _target = document.querySelector('#gauge-container-#id# path.cyanQte')
+        if (_target) {
+          _target.setAttribute('d', drow_arc(38, _options.value));
+          _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+        }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#cyan_id#', value: '#cyan_value#'}]);
     }
@@ -138,7 +146,11 @@
     // Update Magenta on graph on value change
     if ('#magenta_id#' != '') {
       jeedom.cmd.addUpdateFunction('#magenta_id#', function(_options) {
-        document.querySelector('#gauge-container-#id# path.magentaQte')?.setAttribute('d', drow_arc(29, _options.value));
+        var _target = document.querySelector('#gauge-container-#id# path.magentaQte')
+        if (_target) {
+          _target.setAttribute('d', drow_arc(29, _options.value));
+          _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+        }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#magenta_id#', value: '#magenta_value#'}]);
     }
@@ -146,7 +158,11 @@
     // Update Yellow on graph on value change
     if ('#yellow_id#' != '') {
       jeedom.cmd.addUpdateFunction('#yellow_id#', function(_options) {
-        document.querySelector('#gauge-container-#id# path.yellowQte')?.setAttribute('d', drow_arc(20, _options.value));
+        var _target = document.querySelector('#gauge-container-#id# path.yellowQte')
+        if (_target) {
+          _target.setAttribute('d', drow_arc(20, _options.value));
+          _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+        }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#yellow_id#', value: '#yellow_value#'}]);
     }
