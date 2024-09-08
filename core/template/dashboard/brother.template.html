@@ -30,13 +30,13 @@
       <center>
         <div class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#status_id#" title="">
           <div class="content-xs">
-            <span class="cmdName ">Status </span> <strong class="state"></strong>
+            <span class="cmdName ">#translate_status# </span> <strong class="state"></strong>
           </div>
         </div>
         <br/>
         <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#counter_id#" title="">
           <div class="title ">
-            <div class="cmdName">Pages</div>
+            <div class="cmdName">#translate_pages#</div>
           </div>
           <div class="content-sm">
             <span class="pull-right"></span>
@@ -46,7 +46,7 @@
         <br/>
         <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#lastprints_id#" title="">
           <div class="title ">
-            <div class="cmdName">Dernières impressions</div>
+            <div class="cmdName">#translate_lastPrints#</div>
           </div>
           <div class="content-sm">
             <span class="pull-right"></span>
@@ -73,7 +73,7 @@
       jeedom.cmd.addUpdateFunction('#status_id#', function(_options) {
         var _target = document.querySelector('.cmd[data-cmd_id="#status_id#"]')
         if (!_target) return;
-        _target.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate);
+        _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         _target.querySelector('.state').innerHTML = _options.value;
       });
       jeedom.cmd.refreshValue([{cmd_id :'#status_id#', value: '#status_value#', valueDate: '#status_valueDate#', collectDate: '#status_collectDate#'}]);
@@ -84,7 +84,7 @@
       jeedom.cmd.addUpdateFunction('#counter_id#', function(_options) {
         var _target = document.querySelector('.cmd[data-cmd_id="#counter_id#"]')
         if (!_target) return;
-        _target.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate);
+        _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         _target.querySelector('.state').innerHTML = _options.value;
       });
       jeedom.cmd.refreshValue([{cmd_id :'#counter_id#', value: '#counter_value#', valueDate: '#counter_valueDate#', collectDate: '#counter_collectDate#'}]);
@@ -95,7 +95,7 @@
       jeedom.cmd.addUpdateFunction('#lastprints_id#', function(_options) {
         var _target = document.querySelector('.cmd[data-cmd_id="#lastprints_id#"]')
         if (!_target) return;
-        _target.setAttribute('title', 'Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate);
+        _target.setAttribute('title', '#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         _target.querySelector('.state').innerHTML = _options.value;
       });
       jeedom.cmd.refreshValue([{cmd_id :'#lastprints_id#', value: '#lastprints_value#', valueDate: '#lastprints_valueDate#', collectDate: '#lastprints_collectDate#'}]);
@@ -157,12 +157,12 @@
         if (typeof jeeDialog !== 'undefined') {
           jeeDialog.dialog({
            id: 'md_cmdHistory',
-           title: 'Historique',
+           title: '#translate_history#',
            contentUrl: 'index.php?v=d&modal=cmd.history&id=' + event.target.getAttribute('cmd-id')
            });
         } else {
-          // <!-- TODO: Remove jQuery $('#md_modal') backward compatibility when Core 4.3 deprecated -->
-          $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id='+event.target.getAttribute('cmd-id')).dialog('open');
+          // TODO: Remove jQuery $('#md_modal') backward compatibility when Core 4.3 deprecated
+          $('#md_modal').dialog({title: "#translate_history#"}).load('index.php?v=d&modal=cmd.history&id='+event.target.getAttribute('cmd-id')).dialog('open');
         }
       }
     });
