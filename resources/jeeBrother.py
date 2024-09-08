@@ -2,7 +2,7 @@ from asyncio import new_event_loop
 from datetime import datetime
 from dataclasses import asdict
 from brother import Brother, BrotherSensors, SnmpError, UnsupportedModelError
-from json import dumps, load, JSONEncoder
+from json import dumps, load
 import logging
 from logging.config import dictConfig
 from os import getenv, getpid
@@ -62,19 +62,6 @@ logconfig: dict = {
     #     },
     # },
 }
-
-
-class DateTimeEncoder(JSONEncoder):
-    def default(self, o):
-        if isinstance(o, datetime):
-            return o.isoformat()
-        if isinstance(o, BrotherSensors):
-            res: dict = {}
-            for k, v in asdict(o).items():
-                if v is not None:
-                    res[k] = v
-            return res
-        return JSONEncoder.default(self, o)
 
 
 async def setup():
@@ -143,14 +130,23 @@ async def main():
         brother = await Brother.create(argv[2], printer_type=argv[3])
         data = await brother.async_update()
         brother.shutdown()
+        result: dict = {}
+        result['model'] = brother.model
+        result['firmware'] = brother.firmware
+        result['serial'] = brother.serial
+        for k, v in asdict(data).items():
+            if isinstance(v, datetime):
+                result[k] = v.isoformat()
+            elif v is not None:
+                result[k] = v
     except (ConnectionError, TimeoutError, SnmpError) as e:
         logger.debug(f'{e}')
-        data = {'unreachable': True}
+        result = {'unreachable': True}
     except UnsupportedModelError as e:
         logger.error(f'{e}')
-        data = {'unreachable': True}
+        result = {'unreachable': True}
 
-    r = post(callback, dumps(data, cls=DateTimeEncoder))
+    r = post(callback, dumps(result))
 
 
 if __name__ == '__main__':
