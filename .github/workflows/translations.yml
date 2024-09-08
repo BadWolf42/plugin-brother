@@ -17,4 +17,4 @@ jobs:
           deepl_api_key: ${{ secrets.DEEPL_API_KEY }}
           include_empty_translation: true
           generate_source_language_translations: true
-          debug: true
+          # debug: true
