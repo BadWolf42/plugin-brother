@@ -20,13 +20,13 @@ logconfig: dict = {
     'disable_existing_loggers': False,
     'formatters': {
         'withFunction': {
-            'format': '[%(asctime)s][%(levelname)s] : #' + \
+            'format': '[%(asctime)s][%(levelname)s] #' + \
                 (argv[1] if len(argv) > 3 else '[???]') + \
                 '# in %(name)s.%(funcName)s() %(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
         },
         'normal': {
-            'format': '[%(asctime)s][%(levelname)s] : #' + \
+            'format': '[%(asctime)s][%(levelname)s] #' + \
                 (argv[1] if len(argv) > 3 else '[???]') + '# %(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
         },

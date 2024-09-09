@@ -18,11 +18,11 @@ $eqId = init('eqId'); // Collect corresponding eqId
 $eqLogic = brother::byId($eqId);
 /** @var brother $eqLogic */
 if (!is_object($eqLogic)) {
-	self::logger('warning', sprintf(__("L'équipement %s n'existe pas/plus (ou n'est pas associé au plugin brother)", __FILE__), $eqId));
+	self::logger('warning', sprintf(__("L'équipement %s n'existe pas/plus (ou n'est pas associé au plugin Brother)", __FILE__), $eqId));
 	die();
 }
 
 $received = file_get_contents("php://input"); // Get page full content
-log::add('brother', 'debug', sprintf(__("Données reçues par callback '%s'", __FILE__), $received));
+log::add('brother', 'debug', '#' . $this->getHumanName() . '# got callback data: ' . $received);
 
 $eqLogic->recordData($received);
