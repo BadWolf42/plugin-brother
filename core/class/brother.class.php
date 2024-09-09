@@ -242,6 +242,18 @@ class brother extends eqLogic {
       $cmd->setIsVisible(1);
       $cmd->save();
     }
+    $cmd = $this->getCmd(null, 'uptime');
+    if (!is_object($cmd)) {
+      $cmd = new brotherCmd();
+      $cmd->setName(__("Dernier allumage", __FILE__));
+      $cmd->setEqLogic_id($this->getId());
+      $cmd->setLogicalId('uptime');
+      $cmd->setType('info');
+      $cmd->setSubType('numeric');
+      $cmd->setGeneric_type('TIMER');
+      $cmd->setIsVisible(1);
+      $cmd->save();
+    }
     $cmd = $this->getCmd(null, 'counter');
     if (!is_object($cmd)) {
       $cmd = new brotherCmd();
@@ -419,6 +431,7 @@ class brother extends eqLogic {
       'serial' => 'serial',
       'firmware' => 'firmware',
       'status' => 'status',
+      'uptime' => 'uptime',
       'counter' => 'page_counter',
       'black' => 'black_'.$pType.'_remaining'
     ];
@@ -491,6 +504,7 @@ class brother extends eqLogic {
     $this->prepareReplace($replace, 'status');
     $this->prepareReplace($replace, 'counter');
     $this->prepareReplace($replace, 'lastprints');
+    $this->prepareReplace($replace, 'uptime');
 
     $this->prepareReplace($replace, 'black');
     $this->prepareReplace($replace, 'cyan');

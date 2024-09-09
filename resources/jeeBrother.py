@@ -136,7 +136,7 @@ async def main():
         result['serial'] = brother.serial
         for k, v in asdict(data).items():
             if isinstance(v, datetime):
-                result[k] = v.isoformat()
+                result[k] = v.timestamp()
             elif v is not None:
                 result[k] = v
     except (ConnectionError, TimeoutError, SnmpError) as e:
