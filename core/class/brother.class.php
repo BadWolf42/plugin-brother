@@ -414,12 +414,20 @@ class brother extends eqLogic {
     $data['status'] = ucfirst($data['status']);
     // List keys to fetch in $data
     $pType = ($this->getConfiguration('brotherType') == 'laser') ? 'toner' : 'ink';
-    $infos = ['model' => 'model', 'serial' => 'serial', 'firmware' => 'firmware', 'status' => 'status'];
-    $infos += ['counter' => 'page_counter', 'black' => 'black_'.$pType.'_remaining'];
+    $infos = [
+      'model' => 'model',
+      'serial' => 'serial',
+      'firmware' => 'firmware',
+      'status' => 'status',
+      'counter' => 'page_counter',
+      'black' => 'black_'.$pType.'_remaining'
+    ];
     if ($this->getConfiguration('brotherColorType') != 0) {
-      $infos += ['cyan' => 'cyan_'.$pType.'_remaining'];
-      $infos += ['magenta' => 'magenta_'.$pType.'_remaining'];
-      $infos += ['yellow' => 'yellow_'.$pType.'_remaining'];
+      $infos += [
+        'cyan' => 'cyan_'.$pType.'_remaining',
+        'magenta' => 'magenta_'.$pType.'_remaining',
+        'yellow' => 'yellow_'.$pType.'_remaining'
+      ];
     }
     // Backup last counter value
     $lastCounterVal = $this->getCmd(null, 'counter')->execCmd();
