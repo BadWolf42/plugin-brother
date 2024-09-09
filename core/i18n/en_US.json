@@ -4,6 +4,7 @@
         "Cyan": "Cyan",
         "Date de collecte :": "Collection date :",
         "Date de valeur :": "Value date :",
+        "Dernier allumage": "Last switch-on",
         "Dernières impressions": "Latest impressions",
         "Données statistiques supprimées": "Statistical data deleted",
         "Dépendances en cours d'installation... (%s%%)": "Dependencies being installed... (%s%%)",
@@ -27,8 +28,7 @@
     "plugins\/brother\/core\/php\/callback.php": {
         "Accès non autorisé depuis %1\\$s, avec une clé API commençant par %2\\$.8s...": "Unauthorized access from %1\\$s, with an API key starting with %2\\$.8s...",
         "Accès non autorisé depuis %s (pas de clé API)": "Unauthorized access from %s (no API key)",
-        "Données reçues par callback '%s'": "Data received by callback '%s",
-        "L'équipement %s n'existe pas\/plus (ou n'est pas associé au plugin brother)": "The %s device does not\/no longer exist (or is not associated with the brother plugin)"
+        "L'équipement #%s# n'existe pas ou plus, ou n'est pas associé au plugin Brother": "The #%s# device does not exist or no longer exists, or is not associated with the Brother plugin"
     },
     "plugins\/brother\/desktop\/js\/brother.config.js": {
         "Avis": "Reviews"
