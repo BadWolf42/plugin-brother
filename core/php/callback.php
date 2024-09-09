@@ -23,6 +23,6 @@ if (!is_object($eqLogic)) {
 }
 
 $received = file_get_contents("php://input"); // Get page full content
-log::add('brother', 'debug', '#' . $this->getHumanName() . '# got callback data: ' . $received);
+log::add('brother', 'debug', '#' . $eqLogic->getHumanName() . "# callback got data: '" . $received . "'");
 
 $eqLogic->recordData($received);

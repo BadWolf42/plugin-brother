@@ -28,7 +28,7 @@
     "plugins\/brother\/core\/php\/callback.php": {
         "Accès non autorisé depuis %1\\$s, avec une clé API commençant par %2\\$.8s...": "Unauthorized access from %1\\$s, with an API key starting with %2\\$.8s...",
         "Accès non autorisé depuis %s (pas de clé API)": "Unauthorized access from %s (no API key)",
-        "L'équipement #%s# n'existe pas ou plus, ou n'est pas associé au plugin Brother": "The #%s# device does not exist or no longer exists, or is not associated with the Brother plugin"
+        "L'équipement #%s# n'existe pas ou plus, ou n'est pas associé au plugin Brother": "Device #%s# does not exist, or no longer exists, or is not associated with the Brother plugin"
     },
     "plugins\/brother\/desktop\/js\/brother.config.js": {
         "Avis": "Reviews"
