@@ -470,7 +470,7 @@ class brother extends eqLogic {
 
   private function prepareReplace(&$r, $cmdName) {
     $cmd = $this->getCmd(null, $cmdName);
-    if (!is_null($cmd) && $cmd->getIsVisible() == 1) {
+    if (!is_null($cmd) && $cmd !== false && $cmd->getIsVisible() == 1) {
       $r['#'.$cmdName.'_id#'] = $cmd->getId();
       $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
       $r['#'.$cmdName.'_valueDate#'] = $cmd->getValueDate();
