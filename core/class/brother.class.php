@@ -395,32 +395,34 @@ class brother extends eqLogic {
   }
 
   public function recordData($output) {
+    $hName = '#' . $this->getHumanName() . '# ';
+
     if (!$this->getIsEnable()) {
-      log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# is disabled trashing received data... ');
+      log::add(__CLASS__, 'debug', $hName . 'is disabled trashing received data... ');
       return;
     }
 
     if ($output === false || strlen($output) == 0) {
-      log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# no data received');
+      log::add(__CLASS__, 'info', $hName . 'no data received');
       $output = '{"unreachable": true}';
     } else {
-      log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# data content: ' . $output);
+      log::add(__CLASS__, 'debug', $hName . 'data content: ' . $output);
     }
 
     $data = json_decode($output, true);
     if ($data === null) {
-      log::add(__CLASS__, 'error', '#' . $this->getHumanName() . '# JSON decode impossible');
+      log::add(__CLASS__, 'error', $hName . 'JSON decode impossible');
       return;
     }
     if (isset($data['msg'])) {
-      log::add(__CLASS__, 'error', '#' . $this->getHumanName() . '# error while executing Python script: ' . $data['message']);
+      log::add(__CLASS__, 'error', $hName . 'error while executing Python script: ' . $data['message']);
       return;
     }
 
     // Check if device is unreachable
     if (isset($data['unreachable'])) {
       $this->checkAndUpdateCmd('status', __('Injoignable', __FILE__));
-      log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for status: ' . __('Injoignable', __FILE__));
+      log::add(__CLASS__, 'info', $hName . 'record value for status: ' . __('Injoignable', __FILE__));
       return;
     }
     $data['status'] = ucfirst($data['status']);
@@ -449,9 +451,9 @@ class brother extends eqLogic {
     foreach ($infos as $logicalId => $key) {
       if (isset($data[$key]) && !is_null($data[$key])) {
         $this->checkAndUpdateCmd($logicalId, $data[$key]);
-        log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for ' . $logicalId . ': ' . $data[$key]);
+        log::add(__CLASS__, 'info', $hName . 'record value for ' . $logicalId . ': ' . $data[$key]);
       } else {
-        log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# null value for ' . $key);
+        log::add(__CLASS__, 'debug', $hName . 'null value for ' . $key);
       }
     }
 
@@ -462,9 +464,9 @@ class brother extends eqLogic {
       if (is_null($cmdLastPrints) || !is_null($cmdLastPrints->execCmd()))
         $lastPrintsValue = $data['page_counter'] - $lastCounterVal;
       $this->checkAndUpdateCmd('lastprints', $lastPrintsValue);
-      log::add(__CLASS__, 'info', '#' . $this->getHumanName() . '# record value for last prints: ' . $lastPrintsValue);
+      log::add(__CLASS__, 'info', $hName . 'record value for last prints: ' . $lastPrintsValue);
     } else {
-      log::add(__CLASS__, 'debug', '#' . $this->getHumanName() . '# null value for page_counter and/or last counter');
+      log::add(__CLASS__, 'debug', $hName . 'null value for page_counter and/or last counter');
     }
   }
 
