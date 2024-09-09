@@ -18,7 +18,7 @@ $eqId = init('eqId'); // Collect corresponding eqId
 $eqLogic = brother::byId($eqId);
 /** @var brother $eqLogic */
 if (!is_object($eqLogic)) {
-	self::logger('warning', sprintf(__("L'équipement %s n'existe pas/plus (ou n'est pas associé au plugin Brother)", __FILE__), $eqId));
+	self::logger('warning', sprintf(__("L'équipement #%s# n'existe pas ou plus, ou n'est pas associé au plugin Brother", __FILE__), $eqId));
 	die();
 }
 
