@@ -474,7 +474,8 @@ class brother extends eqLogic {
     $cmd = $this->getCmd(null, $cmdName);
     if (!is_null($cmd) && $cmd !== false && $cmd->getIsVisible() == 1) {
       $r['#'.$cmdName.'_id#'] = $cmd->getId();
-      $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
+      if ($cmd->getType() == 'info')
+        $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
       $r['#'.$cmdName.'_valueDate#'] = $cmd->getValueDate();
       $r['#'.$cmdName.'_collectDate#'] = $cmd->getCollectDate();
       $r['#'.$cmdName.'_hidden#'] = '';
