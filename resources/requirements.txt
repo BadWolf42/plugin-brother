@@ -1,3 +1,3 @@
-pysnmp==6.2.5
+pysnmp==7.1.1
 brother==4.3.0
 requests==2.32.3
