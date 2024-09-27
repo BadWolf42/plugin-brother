@@ -1,6 +1,8 @@
 {
     "plugins\/brother\/core\/class\/brother.class.php": {
         "Actualisation": "Update",
+        "Adresse IP \/ Nom d'hôte": "IP address \/ Hostname",
+        "Couleur": "Color",
         "Cyan": "Cyan",
         "Date de collecte :": "Collection date :",
         "Date de valeur :": "Value date :",
@@ -10,20 +12,22 @@
         "Dépendances en cours d'installation... (%s%%)": "Dependencies being installed... (%s%%)",
         "Dépendances installées.": "Dependencies installed.",
         "Equipement desactivé impossible d'éxecuter la commande : #%s#": "Equipment disabled unable to execute command: #%s#",
-        "Etat": "State",
         "Firmware": "Firmware",
         "Historique": "History",
         "Injoignable": "Unreachable",
         "Installation des dépendances, voir log dédié (%s)": "Installation of dependencies, see dedicated log (%s)",
         "Jaune": "Yellow",
+        "Jet d'encre": "Inkjet",
+        "Laser": "Laser",
         "Magenta": "Magenta",
         "Modèle": "Model",
         "Noir": "Black",
+        "Noir & Blanc": "Black & White",
         "Nombre de pages": "Number of pages",
         "Numéro de série": "Serial number",
-        "Pages": "Pages",
         "Rafraichir": "Refresh",
-        "Statut": "Status"
+        "Statut": "Status",
+        "Technologie de l'imprimante": "Printer's technology"
     },
     "plugins\/brother\/core\/php\/callback.php": {
         "Accès non autorisé depuis %1\\$s, avec une clé API commençant par %2\\$.8s...": "Unauthorized access from %1\\$s, with an API key starting with %2\\$.8s...",
