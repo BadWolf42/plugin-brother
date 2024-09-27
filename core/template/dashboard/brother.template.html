@@ -30,13 +30,13 @@
       <center>
         <div class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#status_id#" title="">
           <div class="content-xs">
-            <span class="cmdName ">#translate_status# </span> <strong class="state"></strong>
+            <span class="cmdName ">#status_name# </span> <strong class="state"></strong>
           </div>
         </div>
         <br/>
         <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#counter_id#" title="">
           <div class="title ">
-            <div class="cmdName">#translate_pages#</div>
+            <div class="cmdName">#counter_name#</div>
           </div>
           <div class="content-sm">
             <span class="pull-right"></span>
@@ -46,7 +46,7 @@
         <br/>
         <div class="cmd cmd-widget history cursor" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#lastprints_id#" title="">
           <div class="title ">
-            <div class="cmdName">#translate_lastPrints#</div>
+            <div class="cmdName">#lastprints_name#</div>
           </div>
           <div class="content-sm">
             <span class="pull-right"></span>
@@ -125,7 +125,7 @@
         var _target = document.querySelector('#gauge-container-#id# path.blackQte')
         if (_target) {
           _target.setAttribute('d', drow_arc(47, _options.value));
-          _target.setAttribute('title', '#translate_black# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+          _target.setAttribute('title', '#black_name# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#black_id#', value: '#black_value#', valueDate: '#black_valueDate#', collectDate: '#black_collectDate#'}]);
@@ -137,7 +137,7 @@
         var _target = document.querySelector('#gauge-container-#id# path.cyanQte')
         if (_target) {
           _target.setAttribute('d', drow_arc(38, _options.value));
-          _target.setAttribute('title', '#translate_cyan# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+          _target.setAttribute('title', '#cyan_name# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#cyan_id#', value: '#cyan_value#', valueDate: '#cyan_valueDate#', collectDate: '#cyan_collectDate#'}]);
@@ -149,7 +149,7 @@
         var _target = document.querySelector('#gauge-container-#id# path.magentaQte')
         if (_target) {
           _target.setAttribute('d', drow_arc(29, _options.value));
-          _target.setAttribute('title', '#translate_magenta# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+          _target.setAttribute('title', '#magenta_name# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#magenta_id#', value: '#magenta_value#', valueDate: '#magenta_valueDate#', collectDate: '#magenta_collectDate#'}]);
@@ -161,7 +161,7 @@
         var _target = document.querySelector('#gauge-container-#id# path.yellowQte')
         if (_target) {
           _target.setAttribute('d', drow_arc(20, _options.value));
-          _target.setAttribute('title', '#translate_yellow# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
+          _target.setAttribute('title', '#yellow_name# '+_options.value+'%<br/>#translate_valueDate# '+_options.valueDate+'<br/>#translate_collectDate# '+_options.collectDate);
         }
       });
       jeedom.cmd.refreshValue([{cmd_id :'#yellow_id#', value: '#yellow_value#', valueDate: '#yellow_valueDate#', collectDate: '#yellow_collectDate#'}]);

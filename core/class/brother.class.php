@@ -474,6 +474,7 @@ class brother extends eqLogic {
     $cmd = $this->getCmd(null, $cmdName);
     if (!is_null($cmd) && $cmd !== false && $cmd->getIsVisible() == 1) {
       $r['#'.$cmdName.'_id#'] = $cmd->getId();
+      $r['#'.$cmdName.'_name#'] = $cmd->getName();
       if ($cmd->getType() == 'info')
         $r['#'.$cmdName.'_value#'] = $cmd->execCmd();
       $r['#'.$cmdName.'_valueDate#'] = $cmd->getValueDate();
@@ -492,13 +493,6 @@ class brother extends eqLogic {
     if (!is_array($replace))
       return $replace;
 
-    $replace['#translate_status#'] = __('Etat', __FILE__);
-    $replace['#translate_pages#'] = __('Pages', __FILE__);
-    $replace['#translate_lastPrints#'] = __('Dernières impressions', __FILE__);
-    $replace['#translate_black#'] = __('Noir', __FILE__);
-    $replace['#translate_cyan#'] = __('Cyan', __FILE__);
-    $replace['#translate_magenta#'] = __('Magenta', __FILE__);
-    $replace['#translate_yellow#'] = __('Jaune', __FILE__);
     $replace['#translate_valueDate#'] = __('Date de valeur :', __FILE__);
     $replace['#translate_collectDate#'] = __('Date de collecte :', __FILE__);
     $replace['#translate_history#'] = __('Historique', __FILE__);
