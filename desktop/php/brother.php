@@ -11,10 +11,10 @@ sendVarToJS('eqType', $plugin->getId());
     <legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
     <div class="eqLogicThumbnailContainer">
       <div class="cursor eqLogicAction logoPrimary" data-action="add">
-        <i class="fas fa-plus-circle"></i><br><span>{{Ajouter}}</span>
+        <i class="fas fa-plus-circle"></i><br/><span>{{Ajouter}}</span>
       </div>
       <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
-        <i class="fas fa-wrench"></i><br><span>{{Configuration}}</span>
+        <i class="fas fa-wrench"></i><br/><span>{{Configuration}}</span>
       </div>
     </div>
     <legend><i class="icon kiko-printer"></i> {{Mes Imprimantes}}</legend>
@@ -25,8 +25,7 @@ sendVarToJS('eqType', $plugin->getId());
 foreach (eqLogic::byType($plugin->getId()) as $eqLogic) {
   $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
   echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-  echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
-  echo '<br>';
+  echo '<img src="' . $plugin->getPathImgIcon() . '"/><br/>';
   echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
   echo '</div>';
 }
@@ -97,7 +96,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                   <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                   <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
                 </div>
-              </div><br>
+              </div><br/>
 
               <div class="form-group">
                 <label class="col-sm-6 control-label">{{Adresse IP / Nom d'hôte}}</label>
