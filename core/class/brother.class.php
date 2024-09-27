@@ -503,16 +503,18 @@ class brother extends eqLogic {
     $replace['#translate_collectDate#'] = __('Date de collecte :', __FILE__);
     $replace['#translate_history#'] = __('Historique', __FILE__);
 
-    $this->prepareReplace($replace, 'refresh');
+    $this->prepareReplace($replace, 'model');
+    $this->prepareReplace($replace, 'serial');
+    $this->prepareReplace($replace, 'firmware');
     $this->prepareReplace($replace, 'status');
-    $this->prepareReplace($replace, 'counter');
-    $this->prepareReplace($replace, 'lastprints');
     $this->prepareReplace($replace, 'uptime');
-
+    $this->prepareReplace($replace, 'counter');
     $this->prepareReplace($replace, 'black');
     $this->prepareReplace($replace, 'cyan');
     $this->prepareReplace($replace, 'magenta');
     $this->prepareReplace($replace, 'yellow');
+    $this->prepareReplace($replace, 'lastprints');
+    $this->prepareReplace($replace, 'refresh');
 
     $html = template_replace($replace, getTemplate('core', jeedom::versionAlias($_version), 'brother.template', __CLASS__));
     cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
