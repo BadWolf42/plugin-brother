@@ -482,6 +482,7 @@ class brother extends eqLogic {
       $r['#'.$cmdName.'_hidden#'] = '';
     } else {
       $r['#'.$cmdName.'_id#'] = '';
+      $r['#'.$cmdName.'_value#'] = '';
       $r['#'.$cmdName.'_hidden#'] = 'hidden';
     }
   }
@@ -509,6 +510,19 @@ class brother extends eqLogic {
     $this->prepareReplace($replace, 'yellow');
     $this->prepareReplace($replace, 'lastprints');
     $this->prepareReplace($replace, 'refresh');
+
+    $replace['#additional_infos#'] = __("Adresse IP / Nom d'hôte", __FILE__) . ': ' . $this->getConfiguration('brotherAddress') . '<br/>';
+    $replace['#additional_infos#'] .= __("Technologie de l'imprimante", __FILE__) . ': ';
+    $replace['#additional_infos#'] .= ($this->getConfiguration('brotherType') == 'laser' ? __('Laser', __FILE__) : __("Jet d'encre", __FILE__)) . ' / ';
+    $replace['#additional_infos#'] .= ($this->getConfiguration('brotherColorType') != 0 ? __('Couleur', __FILE__) : __('Noir & Blanc', __FILE__)) . '<br/>';
+    if($replace['#model_value#'] != '')
+      $replace['#additional_infos#'] .= $replace['#model_name#'] . ': ' . $replace['#model_value#'] . '<br/>';
+    if($replace['#serial_value#'] != '')
+      $replace['#additional_infos#'] .= $replace['#serial_name#'] . ': ' . $replace['#serial_value#'] . '<br/>';
+    if($replace['#firmware_value#'] != '')
+      $replace['#additional_infos#'] .= $replace['#firmware_name#'] . ': ' . $replace['#firmware_value#'] . '<br/>';
+    if($replace['#uptime_value#'] != '')
+      $replace['#additional_infos#'] .= $replace['#uptime_name#'] . ': ' . date("Y-m-d H:i:s", $replace['#uptime_value#']) . '<br/>';
 
     $html = template_replace($replace, getTemplate('core', jeedom::versionAlias($_version), 'brother.template', __CLASS__));
     cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
